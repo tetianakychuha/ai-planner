@@ -61,7 +61,7 @@ export default function AppShell() {
   }, [undoTask, store])
 
   return (
-    <div className="flex flex-col h-dvh max-w-md mx-auto bg-white shadow-sm">
+    <div className="flex flex-col h-dvh max-w-md mx-auto" style={{ background: '#F2F2F7' }}>
       {/* rollover banner */}
       {showRollover && staleTasks.length > 0 && (
         <RolloverBanner
@@ -121,11 +121,12 @@ export default function AppShell() {
 
       {/* undo toast */}
       {undoTask && (
-        <div className="absolute bottom-24 left-4 right-4 max-w-md mx-auto bg-gray-800 text-white rounded-2xl px-4 py-3 flex items-center justify-between shadow-lg z-50 animate-fade-in">
+        <div className="absolute bottom-24 left-4 right-4 max-w-md mx-auto text-white rounded-2xl px-4 py-3 flex items-center justify-between shadow-lg z-50 animate-fade-in" style={{ background: '#1C1C1E' }}>
           <span className="text-sm truncate mr-3">Видалено: {undoTask.title}</span>
           <button
             onClick={handleUndo}
-            className="text-indigo-300 font-semibold text-sm flex-shrink-0"
+            className="font-semibold text-sm flex-shrink-0"
+            style={{ color: '#EDE9FF' }}
           >
             Скасувати
           </button>
@@ -133,7 +134,10 @@ export default function AppShell() {
       )}
 
       {/* bottom nav */}
-      <nav className="flex border-t border-gray-200 bg-white safe-bottom">
+      <nav
+        className="flex bg-white safe-bottom"
+        style={{ boxShadow: '0 -0.5px 0 rgba(60,60,67,0.12)' }}
+      >
         <TabButton active={tab === 'capture'} onClick={() => setTab('capture')} emoji="✏️" label="Capture" />
         <TabButton
           active={tab === 'inbox'}
@@ -164,19 +168,24 @@ function TabButton({
   return (
     <button
       onClick={onClick}
-      className={`flex-1 flex flex-col items-center justify-center py-3 gap-0.5 transition-colors ${
-        active ? 'text-indigo-600' : 'text-gray-500'
-      }`}
+      className="flex-1 flex flex-col items-center justify-center py-3 gap-0.5 transition-colors"
+      style={{ color: active ? '#6B4EFF' : '#AEAEB2' }}
     >
       <span className="relative text-2xl leading-none">
         {emoji}
         {!!badge && badge > 0 && (
-          <span className="absolute -top-1 -right-2 bg-indigo-500 text-white text-[10px] font-bold rounded-full min-w-[16px] h-4 flex items-center justify-center px-1">
+          <span
+            className="absolute -top-1 -right-2 text-white text-[10px] font-bold rounded-full min-w-[16px] h-4 flex items-center justify-center px-1"
+            style={{ background: '#FF3B30' }}
+          >
             {badge}
           </span>
         )}
       </span>
-      <span className={`text-xs font-medium ${active ? 'text-indigo-600' : 'text-gray-400'}`}>
+      <span
+        className="font-medium"
+        style={{ fontSize: '10px', color: active ? '#6B4EFF' : '#AEAEB2' }}
+      >
         {label}
       </span>
     </button>

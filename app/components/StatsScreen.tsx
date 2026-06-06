@@ -62,8 +62,8 @@ export default function StatsScreen({ tasks }: { tasks: Task[] }) {
   return (
     <div className="flex flex-col h-full overflow-y-auto">
       <div className="px-4 pt-5 pb-3">
-        <h1 className="text-xl font-semibold text-gray-800">Аналітика</h1>
-        <p className="text-sm text-gray-400 mt-0.5">Твій прогрес</p>
+        <h1 style={{ fontSize: '28px', fontWeight: 700, letterSpacing: '-0.3px', color: '#1C1C1E' }}>Аналітика</h1>
+        <p style={{ fontSize: '13px', fontWeight: 400, color: '#6C6C70', marginTop: '2px' }}>Твій прогрес</p>
       </div>
 
       <div className="px-4 pb-6 flex flex-col gap-4">
@@ -78,36 +78,43 @@ export default function StatsScreen({ tasks }: { tasks: Task[] }) {
 
         {/* must stats */}
         {mustTasks.length > 0 && (
-          <div className="bg-red-50 rounded-2xl p-4">
-            <p className="text-sm font-medium text-red-700 mb-1">🔥 Важливі задачі</p>
-            <p className="text-2xl font-bold text-red-600">{mustDone} / {mustTasks.length}</p>
-            <div className="mt-2 h-2 bg-red-100 rounded-full overflow-hidden">
+          <div style={{ background: '#FFF1F0', borderRadius: '16px', padding: '16px' }}>
+            <p style={{ fontSize: '13px', fontWeight: 500, color: '#FF3B30', marginBottom: '4px' }}>🔥 Важливі задачі</p>
+            <p style={{ fontSize: '28px', fontWeight: 700, color: '#FF3B30' }}>{mustDone} / {mustTasks.length}</p>
+            <div className="mt-2 overflow-hidden" style={{ height: '4px', background: 'rgba(255,59,48,0.15)', borderRadius: '9999px' }}>
               <div
-                className="h-full bg-red-400 rounded-full transition-all duration-500"
-                style={{ width: `${mustTasks.length > 0 ? Math.round((mustDone / mustTasks.length) * 100) : 0}%` }}
+                className="h-full transition-all duration-500"
+                style={{
+                  width: `${mustTasks.length > 0 ? Math.round((mustDone / mustTasks.length) * 100) : 0}%`,
+                  background: '#FF3B30',
+                  borderRadius: '9999px',
+                }}
               />
             </div>
           </div>
         )}
 
         {/* 7-day bar chart */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-          <p className="text-sm font-medium text-gray-700 mb-3">Виконано за 7 днів</p>
+        <div style={{ background: '#FFFFFF', borderRadius: '16px', boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)', padding: '16px' }}>
+          <p style={{ fontSize: '13px', fontWeight: 500, color: '#1C1C1E', marginBottom: '12px' }}>Виконано за 7 днів</p>
           <div className="flex items-end gap-1.5 h-20">
             {perDay.map(({ dateStr, count }) => {
               const d = new Date(dateStr + 'T12:00:00')
               const isToday = dateStr === today
-              const height = count === 0 ? 4 : Math.max(16, Math.round((count / maxPerDay) * 72))
+              const height = count === 0 ? 6 : Math.max(16, Math.round((count / maxPerDay) * 72))
               return (
                 <div key={dateStr} className="flex-1 flex flex-col items-center gap-1">
                   <div
-                    className={`w-full rounded-t-md transition-all ${isToday ? 'bg-indigo-500' : 'bg-indigo-200'}`}
-                    style={{ height: `${height}px` }}
+                    className="w-full rounded-t-md transition-all"
+                    style={{
+                      height: `${height}px`,
+                      background: count === 0 ? '#EDE9FF' : '#6B4EFF',
+                    }}
                   />
-                  <span className={`text-[10px] ${isToday ? 'text-indigo-600 font-semibold' : 'text-gray-400'}`}>
+                  <span style={{ fontSize: '10px', color: isToday ? '#6B4EFF' : '#AEAEB2', fontWeight: isToday ? 600 : 400 }}>
                     {DAY_SHORT[d.getDay()]}
                   </span>
-                  {count > 0 && <span className="text-[10px] text-gray-500">{count}</span>}
+                  {count > 0 && <span style={{ fontSize: '10px', color: '#6C6C70' }}>{count}</span>}
                 </div>
               )
             })}
@@ -116,19 +123,19 @@ export default function StatsScreen({ tasks }: { tasks: Task[] }) {
 
         {/* label distribution */}
         {topLabels.length > 0 && (
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-            <p className="text-sm font-medium text-gray-700 mb-3">Задачі за категоріями</p>
+          <div style={{ background: '#FFFFFF', borderRadius: '16px', boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)', padding: '16px' }}>
+            <p style={{ fontSize: '13px', fontWeight: 500, color: '#1C1C1E', marginBottom: '12px' }}>Задачі за категоріями</p>
             <div className="flex flex-col gap-2">
               {topLabels.map(([label, count]) => (
                 <div key={label} className="flex items-center gap-2">
-                  <span className="text-xs text-gray-500 w-20 truncate">#{label}</span>
-                  <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <span style={{ fontSize: '12px', color: '#6C6C70', width: '80px' }} className="truncate">#{label}</span>
+                  <div className="flex-1 overflow-hidden" style={{ height: '6px', background: '#EDE9FF', borderRadius: '9999px' }}>
                     <div
-                      className="h-full bg-purple-400 rounded-full transition-all duration-500"
-                      style={{ width: `${Math.round((count / maxLabel) * 100)}%` }}
+                      className="h-full transition-all duration-500"
+                      style={{ width: `${Math.round((count / maxLabel) * 100)}%`, background: '#6B4EFF', borderRadius: '9999px' }}
                     />
                   </div>
-                  <span className="text-xs text-gray-400 w-4 text-right">{count}</span>
+                  <span style={{ fontSize: '12px', color: '#AEAEB2', width: '16px', textAlign: 'right' }}>{count}</span>
                 </div>
               ))}
             </div>
@@ -139,11 +146,11 @@ export default function StatsScreen({ tasks }: { tasks: Task[] }) {
         {(() => {
           const overdue = allTasks.filter(t => !t.done && t.dueDate && t.dueDate < today).length
           return overdue > 0 ? (
-            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-center gap-3">
+            <div className="flex items-center gap-3" style={{ background: '#FFF8E7', border: '1px solid #FFD60A', borderRadius: '16px', padding: '16px' }}>
               <span className="text-2xl">⚠️</span>
               <div>
-                <p className="text-sm font-medium text-amber-800">{overdue} прострочених задач</p>
-                <p className="text-xs text-amber-600 mt-0.5">Перевір Inbox і Today</p>
+                <p style={{ fontSize: '13px', fontWeight: 500, color: '#7C5F00' }}>{overdue} прострочених задач</p>
+                <p style={{ fontSize: '12px', color: '#A07800', marginTop: '2px' }}>Перевір Inbox і Today</p>
               </div>
             </div>
           ) : null
@@ -156,9 +163,16 @@ export default function StatsScreen({ tasks }: { tasks: Task[] }) {
 
 function StatCard({ label, value, highlight }: { label: string; value: string | number; highlight?: boolean }) {
   return (
-    <div className={`rounded-2xl p-4 ${highlight ? 'bg-indigo-50' : 'bg-white border border-gray-100 shadow-sm'}`}>
-      <p className="text-xs text-gray-500 mb-1">{label}</p>
-      <p className={`text-2xl font-bold ${highlight ? 'text-indigo-600' : 'text-gray-800'}`}>{value}</p>
+    <div
+      style={{
+        borderRadius: '16px',
+        padding: '16px',
+        background: highlight ? '#EDE9FF' : '#FFFFFF',
+        boxShadow: highlight ? 'none' : '0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)',
+      }}
+    >
+      <p style={{ fontSize: '12px', color: highlight ? '#6B4EFF' : '#6C6C70', marginBottom: '4px' }}>{label}</p>
+      <p style={{ fontSize: '28px', fontWeight: 700, color: highlight ? '#6B4EFF' : '#1C1C1E' }}>{value}</p>
     </div>
   )
 }

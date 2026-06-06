@@ -29,9 +29,15 @@ export default function FilterBar({
       <button
         key={label}
         onClick={onClick}
-        className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
-          active ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-600 active:bg-gray-200'
-        }`}
+        className="whitespace-nowrap transition-colors"
+        style={{
+          padding: '5px 12px',
+          borderRadius: '9999px',
+          fontSize: '13px',
+          fontWeight: 500,
+          background: active ? '#6B4EFF' : '#F2F2F7',
+          color: active ? '#FFFFFF' : '#6C6C70',
+        }}
       >
         {label}
       </button>

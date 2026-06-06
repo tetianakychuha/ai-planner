@@ -1,5 +1,49 @@
 @import "tailwindcss";
 
+:root {
+  /* Brand */
+  --color-primary: #6B4EFF;
+  --color-primary-light: #EDE9FF;
+  --color-primary-pressed: #5538EE;
+
+  /* Priority */
+  --color-important: #FF3B30;
+  --color-important-bg: #FFF1F0;
+
+  /* Backgrounds */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F2F2F7;
+  --bg-card: #FFFFFF;
+
+  /* Text */
+  --text-primary: #1C1C1E;
+  --text-secondary: #6C6C70;
+  --text-tertiary: #AEAEB2;
+
+  /* Date chip */
+  --color-date-bg: #EEF0FF;
+  --color-date-text: #3C3C8A;
+
+  /* Tab */
+  --tab-active: #6B4EFF;
+  --tab-inactive: #AEAEB2;
+
+  /* Badge */
+  --badge-bg: #FF3B30;
+
+  /* Progress */
+  --progress-fill: #6B4EFF;
+  --progress-track: #E5E5EA;
+
+  /* Separator */
+  --separator: rgba(60,60,67,0.12);
+
+  /* Shadows */
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-sheet: 0 -4px 24px rgba(0,0,0,0.10);
+  --shadow-tabbar: 0 -0.5px 0 rgba(60,60,67,0.12);
+}
+
 * {
   -webkit-tap-highlight-color: transparent;
 }
@@ -7,6 +51,7 @@
 html, body {
   height: 100%;
   overscroll-behavior: none;
+  font-family: 'SF Pro Rounded', 'SF Pro Display', -apple-system, 'Inter', sans-serif;
 }
 
 .safe-bottom {

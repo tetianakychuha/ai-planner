@@ -62,28 +62,47 @@ export default function WeekScreen({
       {/* header */}
       <div className="px-4 pt-5 pb-3 flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-gray-800">
+          <h1 style={{ fontSize: '28px', fontWeight: 700, letterSpacing: '-0.3px', color: '#1C1C1E' }}>
             {view === 'week' ? 'Тиждень' : targetMonth.toLocaleDateString('uk-UA', { month: 'long', year: 'numeric' })}
           </h1>
           {view === 'week' && (
-            <p className="text-sm text-gray-400 mt-0.5">
+            <p style={{ fontSize: '13px', fontWeight: 400, color: '#6C6C70', marginTop: '2px' }}>
               {weekDays[0].toLocaleDateString('uk-UA', { day: 'numeric', month: 'short' })} —{' '}
               {weekDays[6].toLocaleDateString('uk-UA', { day: 'numeric', month: 'short' })}
             </p>
           )}
         </div>
 
-        {/* view toggle */}
-        <div className="flex bg-gray-100 rounded-xl p-1 gap-1">
+        {/* view toggle — segment control */}
+        <div
+          className="flex p-1 gap-1"
+          style={{ background: '#F2F2F7', borderRadius: '12px' }}
+        >
           <button
             onClick={() => setView('week')}
-            className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${view === 'week' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-500'}`}
+            className="px-3 py-1 transition-colors"
+            style={{
+              borderRadius: '8px',
+              fontSize: '12px',
+              fontWeight: 500,
+              background: view === 'week' ? '#FFFFFF' : 'transparent',
+              color: view === 'week' ? '#6B4EFF' : '#6C6C70',
+              boxShadow: view === 'week' ? '0 1px 3px rgba(0,0,0,0.10)' : 'none',
+            }}
           >
             Тиждень
           </button>
           <button
             onClick={() => setView('month')}
-            className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${view === 'month' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-500'}`}
+            className="px-3 py-1 transition-colors"
+            style={{
+              borderRadius: '8px',
+              fontSize: '12px',
+              fontWeight: 500,
+              background: view === 'month' ? '#FFFFFF' : 'transparent',
+              color: view === 'month' ? '#6B4EFF' : '#6C6C70',
+              boxShadow: view === 'month' ? '0 1px 3px rgba(0,0,0,0.10)' : 'none',
+            }}
           >
             Місяць
           </button>
@@ -129,40 +148,77 @@ function WeekView({ tasks, days, today, onOpenDetail, onToggle }: {
         return (
           <div key={dateStr}>
             <div className="flex items-center gap-2 mb-2">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0 ${isToday ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-500'}`}>
+              <div
+                className="flex items-center justify-center flex-shrink-0"
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '9999px',
+                  background: isToday ? '#6B4EFF' : '#F2F2F7',
+                  color: isToday ? '#FFFFFF' : '#6C6C70',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                }}
+              >
                 {day.getDate()}
               </div>
-              <span className={`text-sm font-medium ${isToday ? 'text-indigo-600' : isPast ? 'text-gray-400' : 'text-gray-700'}`}>
+              <span style={{ fontSize: '14px', fontWeight: 500, color: isToday ? '#6B4EFF' : isPast ? '#AEAEB2' : '#1C1C1E' }}>
                 {DAY_NAMES_FULL[day.getDay()]}
               </span>
               {dayTasks.length > 0 && (
-                <span className="text-xs text-gray-400 ml-auto">
+                <span style={{ fontSize: '12px', color: '#AEAEB2', marginLeft: 'auto' }}>
                   {dayTasks.filter(t => t.done).length}/{dayTasks.length}
                 </span>
               )}
             </div>
             {dayTasks.length === 0 ? (
-              <div className="ml-10 text-sm text-gray-300">Немає задач</div>
+              <div className="ml-10" style={{ fontSize: '13px', color: '#AEAEB2' }}>Немає задач</div>
             ) : (
               <ul className="ml-10 space-y-1.5">
                 {dayTasks.map(task => (
-                  <li key={task.id} className={`flex items-center gap-2 bg-white rounded-xl border border-gray-100 px-3 py-2 shadow-sm ${task.done ? 'opacity-50' : ''}`}>
+                  <li
+                    key={task.id}
+                    className="flex items-center gap-2"
+                    style={{
+                      background: '#FFFFFF',
+                      borderRadius: '12px',
+                      padding: '8px 12px',
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)',
+                      opacity: task.done ? 0.5 : 1,
+                    }}
+                  >
                     <button
                       onClick={() => onToggle(task.id)}
-                      className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-colors ${task.done ? 'bg-indigo-500 border-indigo-500 text-white' : 'border-gray-300'}`}
+                      className="flex-shrink-0 flex items-center justify-center transition-colors"
+                      style={{
+                        width: '20px',
+                        height: '20px',
+                        borderRadius: '9999px',
+                        border: task.done ? 'none' : '2px solid rgba(60,60,67,0.12)',
+                        background: task.done ? '#6B4EFF' : 'transparent',
+                        color: '#FFFFFF',
+                      }}
                     >
-                      {task.done && <span className="text-[10px] leading-none">✓</span>}
+                      {task.done && <span style={{ fontSize: '10px', lineHeight: 1 }}>✓</span>}
                     </button>
-                    <span className={`flex-1 text-sm ${task.done ? 'line-through text-gray-400' : 'text-gray-800'}`} onClick={() => onOpenDetail(task)}>
+                    <span
+                      className="flex-1"
+                      style={{
+                        fontSize: '14px',
+                        color: task.done ? '#AEAEB2' : '#1C1C1E',
+                        textDecoration: task.done ? 'line-through' : 'none',
+                      }}
+                      onClick={() => onOpenDetail(task)}
+                    >
                       {task.title}
                     </span>
                     {task.priority === 'must' && !task.done && <span className="text-xs">🔥</span>}
-                    {task.duration && !task.done && <span className="text-xs text-gray-400">{task.duration}</span>}
+                    {task.duration && !task.done && <span style={{ fontSize: '12px', color: '#AEAEB2' }}>{task.duration}</span>}
                   </li>
                 ))}
               </ul>
             )}
-            <div className="border-b border-gray-100 mt-3" />
+            <div className="mt-3" style={{ borderBottom: '1px solid rgba(60,60,67,0.08)' }} />
           </div>
         )
       })}
@@ -186,14 +242,26 @@ function MonthView({ tasks, days, today, onOpenDetail, monthOffset, onPrev, onNe
     <div className="flex flex-col flex-1 overflow-hidden">
       {/* month nav */}
       <div className="flex items-center justify-between px-4 pb-2">
-        <button onClick={onPrev} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 active:bg-gray-200 text-lg">‹</button>
-        <button onClick={onNext} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 active:bg-gray-200 text-lg">›</button>
+        <button
+          onClick={onPrev}
+          className="flex items-center justify-center text-lg"
+          style={{ width: '32px', height: '32px', borderRadius: '9999px', background: '#F2F2F7', color: '#6C6C70' }}
+        >
+          ‹
+        </button>
+        <button
+          onClick={onNext}
+          className="flex items-center justify-center text-lg"
+          style={{ width: '32px', height: '32px', borderRadius: '9999px', background: '#F2F2F7', color: '#6C6C70' }}
+        >
+          ›
+        </button>
       </div>
 
       {/* day headers */}
       <div className="grid grid-cols-7 px-2 mb-1">
         {DAY_NAMES_SHORT.map(d => (
-          <div key={d} className="text-center text-xs font-medium text-gray-400 py-1">{d}</div>
+          <div key={d} className="text-center py-1" style={{ fontSize: '12px', fontWeight: 500, color: '#AEAEB2' }}>{d}</div>
         ))}
       </div>
 
@@ -213,28 +281,28 @@ function MonthView({ tasks, days, today, onOpenDetail, monthOffset, onPrev, onNe
             <button
               key={dateStr}
               onClick={() => setSelectedDate(isSelected ? null : dateStr)}
-              className={`flex flex-col items-center py-1.5 rounded-xl transition-colors ${
-                isSelected ? 'bg-indigo-600' :
-                isToday ? 'bg-indigo-100' :
-                'active:bg-gray-100'
-              }`}
+              className="flex flex-col items-center py-1.5 transition-colors"
+              style={{
+                borderRadius: '12px',
+                background: isSelected ? '#6B4EFF' : isToday ? '#EDE9FF' : 'transparent',
+              }}
             >
-              <span className={`text-sm font-medium leading-none ${
-                isSelected ? 'text-white' :
-                isToday ? 'text-indigo-600' :
-                isPast ? 'text-gray-300' :
-                'text-gray-700'
-              }`}>
+              <span style={{
+                fontSize: '14px',
+                fontWeight: 500,
+                lineHeight: 1,
+                color: isSelected ? '#FFFFFF' : isToday ? '#6B4EFF' : isPast ? '#AEAEB2' : '#1C1C1E',
+              }}>
                 {day.getDate()}
               </span>
               <div className="flex gap-0.5 mt-1 h-1.5">
                 {dayTasks.length > 0 && (
-                  <span className={`w-1.5 h-1.5 rounded-full ${
-                    isSelected ? 'bg-white' :
-                    allDone ? 'bg-green-400' :
-                    hasMust ? 'bg-red-400' :
-                    'bg-indigo-400'
-                  }`} />
+                  <span
+                    className="w-1.5 h-1.5 rounded-full"
+                    style={{
+                      background: isSelected ? '#FFFFFF' : allDone ? '#34C759' : hasMust ? '#FF3B30' : '#6B4EFF',
+                    }}
+                  />
                 )}
               </div>
             </button>
@@ -246,17 +314,36 @@ function MonthView({ tasks, days, today, onOpenDetail, monthOffset, onPrev, onNe
       <div className="flex-1 overflow-y-auto mt-3 px-4 pb-4">
         {selectedDate ? (
           <>
-            <p className="text-sm font-medium text-gray-600 mb-2">
+            <p className="mb-2" style={{ fontSize: '13px', fontWeight: 500, color: '#6C6C70' }}>
               {new Date(selectedDate + 'T12:00:00').toLocaleDateString('uk-UA', { weekday: 'long', day: 'numeric', month: 'long' })}
             </p>
             {selectedTasks.length === 0 ? (
-              <p className="text-sm text-gray-300">Немає задач</p>
+              <p style={{ fontSize: '13px', color: '#AEAEB2' }}>Немає задач</p>
             ) : (
               <ul className="space-y-2">
                 {selectedTasks.map(task => (
-                  <li key={task.id} className={`flex items-center gap-2 bg-white rounded-xl border border-gray-100 px-3 py-2.5 shadow-sm ${task.done ? 'opacity-50' : ''}`}
-                    onClick={() => onOpenDetail(task)}>
-                    <span className={`flex-1 text-sm ${task.done ? 'line-through text-gray-400' : 'text-gray-800'}`}>{task.title}</span>
+                  <li
+                    key={task.id}
+                    className="flex items-center gap-2"
+                    style={{
+                      background: '#FFFFFF',
+                      borderRadius: '12px',
+                      padding: '10px 12px',
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)',
+                      opacity: task.done ? 0.5 : 1,
+                    }}
+                    onClick={() => onOpenDetail(task)}
+                  >
+                    <span
+                      className="flex-1"
+                      style={{
+                        fontSize: '14px',
+                        color: task.done ? '#AEAEB2' : '#1C1C1E',
+                        textDecoration: task.done ? 'line-through' : 'none',
+                      }}
+                    >
+                      {task.title}
+                    </span>
                     {task.priority === 'must' && !task.done && <span className="text-xs">🔥</span>}
                   </li>
                 ))}
@@ -264,7 +351,7 @@ function MonthView({ tasks, days, today, onOpenDetail, monthOffset, onPrev, onNe
             )}
           </>
         ) : (
-          <p className="text-sm text-gray-300 text-center mt-4">Натисни на день щоб побачити задачі</p>
+          <p className="text-center mt-4" style={{ fontSize: '13px', color: '#AEAEB2' }}>Натисни на день щоб побачити задачі</p>
         )}
       </div>
     </div>

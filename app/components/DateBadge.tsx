@@ -23,7 +23,18 @@ export default function DateBadge({
 
   return (
     <span
-      className="relative text-xs font-medium bg-indigo-50 text-indigo-500 px-2 py-0.5 rounded-full cursor-pointer active:bg-indigo-100"
+      className="relative cursor-pointer"
+      style={{
+        fontSize: '13px',
+        fontWeight: 500,
+        background: '#EEF0FF',
+        color: '#3C3C8A',
+        padding: '5px 10px',
+        borderRadius: '9999px',
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '4px',
+      }}
       onClick={() => inputRef.current?.showPicker()}
     >
       📅 {formatDate(dueDate)}

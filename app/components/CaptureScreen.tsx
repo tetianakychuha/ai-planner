@@ -74,28 +74,46 @@ export default function CaptureScreen({ onSave }: { onSave: (tasks: ParsedTask[]
 
   return (
     <div className="flex flex-col h-full p-4 gap-4">
-      <h1 className="text-xl font-semibold text-gray-800 pt-2">Що потрібно зробити?</h1>
+      <h1
+        className="pt-2"
+        style={{ fontSize: '28px', fontWeight: 700, letterSpacing: '-0.3px', color: '#1C1C1E' }}
+      >
+        Що потрібно зробити?
+      </h1>
 
       <textarea
-        className="flex-1 w-full rounded-2xl border border-gray-200 bg-gray-50 p-4 text-base resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent placeholder-gray-400"
+        className="flex-1 w-full resize-none focus:outline-none focus:ring-2 placeholder-[#AEAEB2]"
+        style={{
+          background: '#F2F2F7',
+          borderRadius: '16px',
+          border: 'none',
+          padding: '16px',
+          fontSize: '17px',
+          fontWeight: 500,
+          color: '#1C1C1E',
+        }}
         placeholder="Напиши все підряд... наприклад: написати Анні, доробити презу, о 15 дзвінок"
         value={text}
         onChange={e => setText(e.target.value)}
         autoFocus
       />
 
-      {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+      {error && <p className="text-sm text-center" style={{ color: '#FF3B30' }}>{error}</p>}
 
       <div className="flex gap-3">
         {/* mic button */}
         <button
           onClick={toggleVoice}
           disabled={loading}
-          className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow transition-all ${
-            listening
-              ? 'bg-red-500 text-white animate-pulse'
-              : 'bg-gray-100 text-gray-600 active:bg-gray-200'
-          }`}
+          className="flex items-center justify-center text-2xl transition-all"
+          style={{
+            width: '52px',
+            height: '52px',
+            borderRadius: '9999px',
+            background: listening ? '#FF3B30' : '#F2F2F7',
+            color: listening ? '#FFFFFF' : '#6C6C70',
+            flexShrink: 0,
+          }}
           aria-label={listening ? 'Зупинити запис' : 'Голосовий ввід'}
         >
           🎙️
@@ -105,7 +123,15 @@ export default function CaptureScreen({ onSave }: { onSave: (tasks: ParsedTask[]
         <button
           onClick={handleSave}
           disabled={!text.trim() || loading}
-          className="flex-1 h-14 rounded-2xl bg-indigo-600 text-white font-semibold text-base shadow disabled:opacity-40 active:bg-indigo-700 transition-colors flex items-center justify-center gap-2"
+          className="flex-1 disabled:opacity-40 transition-colors flex items-center justify-center gap-2"
+          style={{
+            height: '52px',
+            borderRadius: '16px',
+            background: '#6B4EFF',
+            color: '#FFFFFF',
+            fontSize: '16px',
+            fontWeight: 600,
+          }}
         >
           {loading ? (
             <>

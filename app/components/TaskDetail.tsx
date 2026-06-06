@@ -26,22 +26,52 @@ export default function TaskDetail({
     onClose()
   }
 
+  const fieldLabelStyle = {
+    fontSize: '11px',
+    fontWeight: 500,
+    color: '#AEAEB2',
+    letterSpacing: '0.5px',
+    textTransform: 'uppercase' as const,
+  }
+
+  const inputStyle = {
+    background: '#F2F2F7',
+    borderRadius: '12px',
+    padding: '14px 16px',
+    fontSize: '17px',
+    fontWeight: 500,
+    color: '#1C1C1E',
+    border: 'none',
+    width: '100%',
+    outline: 'none',
+  }
+
   return (
     <div className="fixed inset-0 z-50 flex flex-col justify-end" onClick={onClose}>
       <div
-        className="bg-white rounded-t-3xl shadow-2xl p-6 flex flex-col gap-5 max-h-[85vh] overflow-y-auto"
+        className="flex flex-col gap-5 max-h-[85vh] overflow-y-auto"
+        style={{
+          background: '#FFFFFF',
+          borderRadius: '20px 20px 0 0',
+          padding: '24px',
+          boxShadow: '0 -4px 24px rgba(0,0,0,0.10)',
+        }}
         onClick={e => e.stopPropagation()}
       >
-        {/* handle */}
-        <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto -mt-2" />
+        {/* drag handle */}
+        <div
+          className="mx-auto -mt-2"
+          style={{ width: '36px', height: '4px', background: 'rgba(60,60,67,0.12)', borderRadius: '9999px' }}
+        />
 
-        <h2 className="text-lg font-semibold text-gray-800">Редагувати задачу</h2>
+        <h2 style={{ fontSize: '17px', fontWeight: 600, color: '#1C1C1E' }}>Редагувати задачу</h2>
 
         {/* title */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Назва</label>
+          <label style={fieldLabelStyle}>Назва</label>
           <textarea
-            className="w-full rounded-xl border border-gray-200 bg-gray-50 p-3 text-base resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="resize-none focus:outline-none focus:ring-2"
+            style={{ ...inputStyle, borderRadius: '12px' }}
             rows={2}
             value={title}
             onChange={e => setTitle(e.target.value)}
@@ -50,25 +80,33 @@ export default function TaskDetail({
 
         {/* priority */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Пріоритет</label>
+          <label style={fieldLabelStyle}>Пріоритет</label>
           <div className="flex gap-2">
             <button
               onClick={() => setPriority('must')}
-              className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-                priority === 'must'
-                  ? 'bg-red-500 text-white'
-                  : 'bg-gray-100 text-gray-600 active:bg-gray-200'
-              }`}
+              className="flex-1 transition-colors"
+              style={{
+                height: '48px',
+                borderRadius: '12px',
+                fontSize: '13px',
+                fontWeight: 500,
+                background: priority === 'must' ? '#FF3B30' : '#F2F2F7',
+                color: priority === 'must' ? '#FFFFFF' : '#6C6C70',
+              }}
             >
               🔥 Важливо
             </button>
             <button
               onClick={() => setPriority('nice')}
-              className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-                priority === 'nice'
-                  ? 'bg-indigo-500 text-white'
-                  : 'bg-gray-100 text-gray-600 active:bg-gray-200'
-              }`}
+              className="flex-1 transition-colors"
+              style={{
+                height: '48px',
+                borderRadius: '12px',
+                fontSize: '13px',
+                fontWeight: 500,
+                background: priority === 'nice' ? '#6B4EFF' : '#F2F2F7',
+                color: priority === 'nice' ? '#FFFFFF' : '#6C6C70',
+              }}
             >
               ✨ Бажано
             </button>
@@ -77,17 +115,17 @@ export default function TaskDetail({
 
         {/* due date */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Дедлайн</label>
+          <label style={fieldLabelStyle}>Дедлайн</label>
           <input
             type="date"
             value={dueDate}
             onChange={e => setDueDate(e.target.value)}
-            className="w-full rounded-xl border border-gray-200 bg-gray-50 p-3 text-base focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            style={inputStyle}
           />
           {dueDate && (
             <button
               onClick={() => setDueDate('')}
-              className="text-xs text-gray-400 text-left"
+              style={{ fontSize: '12px', color: '#AEAEB2', textAlign: 'left' }}
             >
               × Прибрати дату
             </button>
@@ -96,20 +134,28 @@ export default function TaskDetail({
 
         {/* duration */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Тривалість</label>
+          <label style={fieldLabelStyle}>Тривалість</label>
           <input
             type="text"
             placeholder="напр. 30 хв, 1 год"
             value={duration}
             onChange={e => setDuration(e.target.value)}
-            className="w-full rounded-xl border border-gray-200 bg-gray-50 p-3 text-base focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            style={inputStyle}
           />
         </div>
 
         {/* save */}
         <button
           onClick={handleSave}
-          className="w-full py-3.5 rounded-2xl bg-indigo-600 text-white font-semibold text-base active:bg-indigo-700 transition-colors"
+          className="w-full transition-colors"
+          style={{
+            height: '52px',
+            borderRadius: '16px',
+            background: '#6B4EFF',
+            color: '#FFFFFF',
+            fontSize: '16px',
+            fontWeight: 600,
+          }}
         >
           Зберегти
         </button>
