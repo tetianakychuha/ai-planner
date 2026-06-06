@@ -1,4 +1,5 @@
 'use client'
+import { useState } from 'react'
 import { Task } from '../types'
 
 export default function TodayScreen({
@@ -6,11 +7,13 @@ export default function TodayScreen({
   onToggle,
   onMoveToInbox,
   onDelete,
+  onUpdateTitle,
 }: {
   tasks: Task[]
   onToggle: (id: string) => void
   onMoveToInbox: (id: string) => void
   onDelete: (id: string) => void
+  onUpdateTitle: (id: string, title: string) => void
 }) {
   const done = tasks.filter(t => t.done)
   const pending = tasks.filter(t => !t.done).sort((a, b) => {
@@ -61,6 +64,7 @@ export default function TodayScreen({
               onToggle={onToggle}
               onMoveToInbox={onMoveToInbox}
               onDelete={onDelete}
+              onUpdateTitle={onUpdateTitle}
             />
           ))}
         </ul>
@@ -85,12 +89,17 @@ function TaskRow({
   onToggle,
   onMoveToInbox,
   onDelete,
+  onUpdateTitle,
 }: {
   task: Task
   onToggle: (id: string) => void
   onMoveToInbox: (id: string) => void
   onDelete: (id: string) => void
+  onUpdateTitle: (id: string, title: string) => void
 }) {
+  const [editing, setEditing] = useState(false)
+  const [editValue, setEditValue] = useState(task.title)
+
   return (
     <li className={`bg-white rounded-2xl border shadow-sm transition-opacity ${task.done ? 'opacity-50 border-gray-100' : 'border-gray-100'}`}>
       <div className="flex items-start gap-3 p-4">
@@ -109,9 +118,23 @@ function TaskRow({
 
         {/* title + badges */}
         <div className="flex-1 min-w-0">
-          <span className={`text-base leading-snug ${task.done ? 'line-through text-gray-400' : 'text-gray-800'}`}>
-            {task.title}
-          </span>
+          {editing ? (
+            <input
+              autoFocus
+              className="w-full text-base text-gray-800 bg-gray-50 rounded-xl px-2 py-1 border border-indigo-300 focus:outline-none"
+              value={editValue}
+              onChange={e => setEditValue(e.target.value)}
+              onBlur={() => { onUpdateTitle(task.id, editValue.trim() || task.title); setEditing(false) }}
+              onKeyDown={e => { if (e.key === 'Enter') { onUpdateTitle(task.id, editValue.trim() || task.title); setEditing(false) } }}
+            />
+          ) : (
+            <span
+              className={`text-base leading-snug ${task.done ? 'line-through text-gray-400' : 'text-gray-800'}`}
+              onDoubleClick={() => !task.done && setEditing(true)}
+            >
+              {task.title}
+            </span>
+          )}
           {!task.done && (task.priority === 'must' || task.dueDate || task.duration) && (
             <div className="flex gap-1.5 flex-wrap mt-1">
               {task.priority === 'must' && (

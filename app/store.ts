@@ -65,6 +65,10 @@ export function useTasks() {
     persist(tasks.map(t => t.id === id ? { ...t, done: !t.done } : t))
   }, [tasks, persist])
 
+  const updateTitle = useCallback((id: string, title: string) => {
+    persist(tasks.map(t => t.id === id ? { ...t, title } : t))
+  }, [tasks, persist])
+
   const deleteTask = useCallback((id: string) => {
     persist(tasks.filter(t => t.id !== id))
   }, [tasks, persist])
@@ -72,5 +76,5 @@ export function useTasks() {
   const inboxTasks = tasks.filter(t => t.list === 'inbox')
   const todayTasks = tasks.filter(t => t.list === 'today')
 
-  return { tasks, inboxTasks, todayTasks, addTask, addTasks, moveToToday, moveToInbox, toggleDone, deleteTask }
+  return { tasks, inboxTasks, todayTasks, addTask, addTasks, moveToToday, moveToInbox, toggleDone, updateTitle, deleteTask }
 }

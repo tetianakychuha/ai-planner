@@ -44,6 +44,7 @@ export default function AppShell() {
             tasks={store.inboxTasks}
             onMoveToToday={store.moveToToday}
             onDelete={handleDelete}
+            onUpdateTitle={store.updateTitle}
           />
         )}
         {tab === 'today' && (
@@ -52,6 +53,7 @@ export default function AppShell() {
             onToggle={store.toggleDone}
             onMoveToInbox={store.moveToInbox}
             onDelete={handleDelete}
+            onUpdateTitle={store.updateTitle}
           />
         )}
       </main>

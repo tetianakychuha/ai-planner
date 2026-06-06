@@ -6,10 +6,12 @@ export default function InboxScreen({
   tasks,
   onMoveToToday,
   onDelete,
+  onUpdateTitle,
 }: {
   tasks: Task[]
   onMoveToToday: (id: string) => void
   onDelete: (id: string) => void
+  onUpdateTitle: (id: string, title: string) => void
 }) {
   const sorted = [...tasks].sort((a, b) => {
     if (a.priority === 'must' && b.priority !== 'must') return -1
@@ -38,6 +40,7 @@ export default function InboxScreen({
               task={task}
               onMoveToToday={onMoveToToday}
               onDelete={onDelete}
+              onUpdateTitle={onUpdateTitle}
             />
           ))}
         </ul>
@@ -50,13 +53,17 @@ function SwipeableCard({
   task,
   onMoveToToday,
   onDelete,
+  onUpdateTitle,
 }: {
   task: Task
   onMoveToToday: (id: string) => void
   onDelete: (id: string) => void
+  onUpdateTitle: (id: string, title: string) => void
 }) {
   const [offsetX, setOffsetX] = useState(0)
   const [deleting, setDeleting] = useState(false)
+  const [editing, setEditing] = useState(false)
+  const [editValue, setEditValue] = useState(task.title)
   const startX = useRef<number | null>(null)
 
   function onTouchStart(e: React.TouchEvent) {
@@ -97,7 +104,18 @@ function SwipeableCard({
         }}
         className="relative bg-white border border-gray-100 shadow-sm p-4 rounded-2xl"
       >
-        <p className="text-base text-gray-800 mb-2 leading-snug">{task.title}</p>
+        {editing ? (
+          <input
+            autoFocus
+            className="w-full text-base text-gray-800 mb-2 leading-snug bg-gray-50 rounded-xl px-2 py-1 border border-indigo-300 focus:outline-none"
+            value={editValue}
+            onChange={e => setEditValue(e.target.value)}
+            onBlur={() => { onUpdateTitle(task.id, editValue.trim() || task.title); setEditing(false) }}
+            onKeyDown={e => { if (e.key === 'Enter') { onUpdateTitle(task.id, editValue.trim() || task.title); setEditing(false) } }}
+          />
+        ) : (
+          <p className="text-base text-gray-800 mb-2 leading-snug" onDoubleClick={() => setEditing(true)}>{task.title}</p>
+        )}
         <div className="flex gap-2 flex-wrap mb-3">
           {task.priority === 'must' && (
             <span className="text-xs font-medium bg-red-50 text-red-500 px-2 py-0.5 rounded-full">🔥 Важливо</span>
