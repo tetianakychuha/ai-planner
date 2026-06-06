@@ -32,6 +32,15 @@ export default function AppShell() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [staleTasks.length])
 
+  // auto-move inbox tasks with today's dueDate to Today
+  useEffect(() => {
+    const today = new Date().toISOString().slice(0, 10)
+    store.inboxTasks
+      .filter(t => t.dueDate === today)
+      .forEach(t => store.moveToToday(t.id))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const handleDelete = useCallback((id: string) => {
     const task = store.tasks.find(t => t.id === id)
     if (!task) return
