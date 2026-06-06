@@ -23,7 +23,13 @@ export default function InboxScreen({
         <EmptyState emoji="📭" text="Немає нових задач. Додай через Capture!" />
       ) : (
         <ul className="flex-1 overflow-y-auto px-4 pb-4 space-y-3">
-          {tasks.map(task => (
+          {[...tasks].sort((a, b) => {
+            if (a.priority === 'must' && b.priority !== 'must') return -1
+            if (a.priority !== 'must' && b.priority === 'must') return 1
+            if (a.dueDate && !b.dueDate) return -1
+            if (!a.dueDate && b.dueDate) return 1
+            return 0
+          }).map(task => (
             <li key={task.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
               <p className="text-base text-gray-800 mb-2 leading-snug">{task.title}</p>
               <div className="flex gap-2 flex-wrap mb-3">
