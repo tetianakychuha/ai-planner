@@ -1,0 +1,88 @@
+'use client'
+import { useState, useRef } from 'react'
+
+export default function CaptureScreen({ onSave }: { onSave: (text: string) => void }) {
+  const [text, setText] = useState('')
+  const [listening, setListening] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recognitionRef = useRef<any>(null)
+
+  function toggleVoice() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const w = window as any
+    const SR = w.SpeechRecognition || w.webkitSpeechRecognition
+
+    if (!SR) {
+      alert('Голосовий ввід не підтримується цим браузером')
+      return
+    }
+
+    if (listening) {
+      recognitionRef.current?.stop()
+      setListening(false)
+      return
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const recognition = new SR() as any
+    recognition.lang = 'uk-UA'
+    recognition.continuous = true
+    recognition.interimResults = false
+    recognition.onresult = (e: { results: { [key: number]: { [key: number]: { transcript: string } } } }) => {
+      const transcript = Array.from(Object.values(e.results))
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .map((r: any) => r[0].transcript as string)
+        .join(' ')
+      setText(prev => prev ? prev + ' ' + transcript : transcript)
+    }
+    recognition.onend = () => setListening(false)
+    recognitionRef.current = recognition
+    recognition.start()
+    setListening(true)
+  }
+
+  function handleSave() {
+    const trimmed = text.trim()
+    if (!trimmed) return
+    onSave(trimmed)
+    setText('')
+  }
+
+  return (
+    <div className="flex flex-col h-full p-4 gap-4">
+      <h1 className="text-xl font-semibold text-gray-800 pt-2">Що потрібно зробити?</h1>
+
+      <textarea
+        className="flex-1 w-full rounded-2xl border border-gray-200 bg-gray-50 p-4 text-base resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent placeholder-gray-400"
+        placeholder="Напиши все підряд... наприклад: написати Анні, доробити презу, о 15 дзвінок"
+        value={text}
+        onChange={e => setText(e.target.value)}
+        autoFocus
+      />
+
+      <div className="flex gap-3">
+        {/* mic button */}
+        <button
+          onClick={toggleVoice}
+          className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow transition-all ${
+            listening
+              ? 'bg-red-500 text-white animate-pulse'
+              : 'bg-gray-100 text-gray-600 active:bg-gray-200'
+          }`}
+          aria-label={listening ? 'Зупинити запис' : 'Голосовий ввід'}
+        >
+          🎙️
+        </button>
+
+        {/* save button */}
+        <button
+          onClick={handleSave}
+          disabled={!text.trim()}
+          className="flex-1 h-14 rounded-2xl bg-indigo-600 text-white font-semibold text-base shadow disabled:opacity-40 active:bg-indigo-700 transition-colors"
+        >
+          Зберегти в Inbox
+        </button>
+      </div>
+    </div>
+  )
+}

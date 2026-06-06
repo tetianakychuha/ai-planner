@@ -1,0 +1,117 @@
+'use client'
+import { Task } from '../types'
+
+export default function TodayScreen({
+  tasks,
+  onToggle,
+  onMoveToInbox,
+  onDelete,
+}: {
+  tasks: Task[]
+  onToggle: (id: string) => void
+  onMoveToInbox: (id: string) => void
+  onDelete: (id: string) => void
+}) {
+  const done = tasks.filter(t => t.done)
+  const pending = tasks.filter(t => !t.done)
+
+  return (
+    <div className="flex flex-col h-full">
+      <div className="px-4 pt-5 pb-3">
+        <h1 className="text-xl font-semibold text-gray-800">Сьогодні</h1>
+        <p className="text-sm text-gray-400 mt-0.5">
+          {pending.length === 0 && tasks.length > 0
+            ? 'Все виконано! 🎉'
+            : `${pending.length} залишилось · ${done.length} виконано`}
+        </p>
+      </div>
+
+      {tasks.length === 0 ? (
+        <div className="flex-1 flex flex-col items-center justify-center gap-3 pb-16">
+          <span className="text-5xl">☀️</span>
+          <p className="text-gray-400 text-center px-8">
+            Немає задач на сьогодні. Перенеси з Inbox!
+          </p>
+        </div>
+      ) : (
+        <ul className="flex-1 overflow-y-auto px-4 pb-4 space-y-2">
+          {tasks.map(task => (
+            <TaskRow
+              key={task.id}
+              task={task}
+              onToggle={onToggle}
+              onMoveToInbox={onMoveToInbox}
+              onDelete={onDelete}
+            />
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
+
+function TaskRow({
+  task,
+  onToggle,
+  onMoveToInbox,
+  onDelete,
+}: {
+  task: Task
+  onToggle: (id: string) => void
+  onMoveToInbox: (id: string) => void
+  onDelete: (id: string) => void
+}) {
+  return (
+    <li className={`bg-white rounded-2xl border shadow-sm transition-opacity ${task.done ? 'opacity-50 border-gray-100' : 'border-gray-100'}`}>
+      <div className="flex items-start gap-3 p-4">
+        {/* checkbox */}
+        <button
+          onClick={() => onToggle(task.id)}
+          className={`mt-0.5 w-6 h-6 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-colors ${
+            task.done
+              ? 'bg-indigo-500 border-indigo-500 text-white'
+              : 'border-gray-300'
+          }`}
+          aria-label={task.done ? 'Позначити як невиконане' : 'Позначити як виконане'}
+        >
+          {task.done && <span className="text-xs leading-none">✓</span>}
+        </button>
+
+        {/* title */}
+        <span className={`flex-1 text-base leading-snug ${task.done ? 'line-through text-gray-400' : 'text-gray-800'}`}>
+          {task.title}
+        </span>
+
+        {/* actions */}
+        <div className="flex gap-1 ml-2">
+          <button
+            onClick={() => onMoveToInbox(task.id)}
+            className="w-9 h-9 rounded-xl bg-gray-50 text-gray-400 text-base flex items-center justify-center active:bg-gray-100"
+            aria-label="Перенести в Inbox"
+          >
+            📥
+          </button>
+          <button
+            onClick={() => onDelete(task.id)}
+            className="w-9 h-9 rounded-xl bg-red-50 text-red-400 text-base flex items-center justify-center active:bg-red-100"
+            aria-label="Видалити"
+          >
+            ×
+          </button>
+        </div>
+      </div>
+
+      {/* subtasks */}
+      {task.subtasks && task.subtasks.length > 0 && (
+        <ul className="pb-3 px-4 pl-13 space-y-1 border-t border-gray-50 pt-2">
+          {task.subtasks.map(sub => (
+            <li key={sub.id} className="flex items-center gap-2 text-sm text-gray-600">
+              <span className="w-4 h-4 rounded-full border border-gray-300 flex-shrink-0" />
+              {sub.title}
+            </li>
+          ))}
+        </ul>
+      )}
+    </li>
+  )
+}
