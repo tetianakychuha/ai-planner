@@ -33,14 +33,17 @@ export default function AppShell() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [staleTasks.length])
 
-  // auto-move inbox tasks with today's dueDate to Today
+  // auto-move inbox tasks with today's dueDate to Today — runs once after tasks load
+  const autoMovedRef = useRef(false)
   useEffect(() => {
+    if (autoMovedRef.current || store.tasks.length === 0) return
+    autoMovedRef.current = true
     const today = new Date().toISOString().slice(0, 10)
     store.inboxTasks
       .filter(t => t.dueDate === today)
       .forEach(t => store.moveToToday(t.id))
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [store.tasks.length])
 
   const handleDelete = useCallback((id: string) => {
     const task = store.tasks.find(t => t.id === id)
@@ -95,6 +98,7 @@ export default function AppShell() {
             tasks={store.tasks}
             onOpenDetail={setDetailTask}
             onToggle={store.toggleDone}
+            onMoveToDate={(id, date) => store.updateTask(id, { dueDate: date })}
           />
         )}
         {tab === 'today' && (
@@ -153,8 +157,8 @@ export default function AppShell() {
           label="Today"
           badge={store.todayTasks.filter(t => !t.done).length}
         />
-        <TabButton active={tab === 'week'} onClick={() => setTab('week')} emoji="📅" label="Календар" />
-        <TabButton active={tab === 'stats'} onClick={() => setTab('stats')} emoji="📊" label="Статистика" />
+        <TabButton active={tab === 'week'} onClick={() => setTab('week')} emoji="📅" label="Calendar" />
+        <TabButton active={tab === 'stats'} onClick={() => setTab('stats')} emoji="📊" label="Stats" />
       </nav>
     </div>
   )

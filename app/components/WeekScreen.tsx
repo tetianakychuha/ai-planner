@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Task } from '../types'
 
 const DAY_NAMES_FULL = ['Неділя', 'Понеділок', 'Вівторок', 'Середа', 'Четвер', 'П\'ятниця', 'Субота']
@@ -43,15 +43,18 @@ export default function WeekScreen({
   tasks,
   onOpenDetail,
   onToggle,
+  onMoveToDate,
 }: {
   tasks: Task[]
   onOpenDetail: (task: Task) => void
   onToggle: (id: string) => void
+  onMoveToDate: (id: string, date: string) => void
 }) {
   const [view, setView] = useState<'week' | 'month'>('week')
   const today = toDateStr(new Date())
   const now = new Date()
   const [monthOffset, setMonthOffset] = useState(0)
+  const [draggingTask, setDraggingTask] = useState<Task | null>(null)
 
   const targetMonth = new Date(now.getFullYear(), now.getMonth() + monthOffset, 1)
   const monthDays = getMonthDays(targetMonth.getFullYear(), targetMonth.getMonth())
@@ -109,8 +112,26 @@ export default function WeekScreen({
         </div>
       </div>
 
+      {draggingTask && (
+        <div className="mx-4 mb-2 px-3 py-2 rounded-xl text-sm animate-fade-in" style={{ background: '#EDE9FF', color: '#6B4EFF' }}>
+          Переміщення: <strong>{draggingTask.title}</strong> — тапни на день куди перемістити
+          <button onClick={() => setDraggingTask(null)} className="ml-2 opacity-60">✕</button>
+        </div>
+      )}
+
       {view === 'week' ? (
-        <WeekView tasks={tasks} days={weekDays} today={today} onOpenDetail={onOpenDetail} onToggle={onToggle} />
+        <WeekView
+          tasks={tasks}
+          days={weekDays}
+          today={today}
+          onOpenDetail={onOpenDetail}
+          onToggle={onToggle}
+          draggingTask={draggingTask}
+          onStartDrag={setDraggingTask}
+          onDropToDate={(dateStr) => {
+            if (draggingTask) { onMoveToDate(draggingTask.id, dateStr); setDraggingTask(null) }
+          }}
+        />
       ) : (
         <MonthView
           tasks={tasks}
@@ -120,17 +141,24 @@ export default function WeekScreen({
           monthOffset={monthOffset}
           onPrev={() => setMonthOffset(o => o - 1)}
           onNext={() => setMonthOffset(o => o + 1)}
+          draggingTask={draggingTask}
+          onDropToDate={(dateStr) => {
+            if (draggingTask) { onMoveToDate(draggingTask.id, dateStr); setDraggingTask(null) }
+          }}
         />
       )}
     </div>
   )
 }
 
-function WeekView({ tasks, days, today, onOpenDetail, onToggle }: {
+function WeekView({ tasks, days, today, onOpenDetail, onToggle, draggingTask, onStartDrag, onDropToDate }: {
   tasks: Task[]
   days: Date[]
   today: string
   onOpenDetail: (t: Task) => void
+  draggingTask: Task | null
+  onStartDrag: (t: Task) => void
+  onDropToDate: (dateStr: string) => void
   onToggle: (id: string) => void
 }) {
   return (
@@ -146,18 +174,22 @@ function WeekView({ tasks, days, today, onOpenDetail, onToggle }: {
         })
 
         return (
-          <div key={dateStr}>
-            <div className="flex items-center gap-2 mb-2">
+          <div
+            key={dateStr}
+            onClick={() => draggingTask && onDropToDate(dateStr)}
+            style={{ cursor: draggingTask ? 'pointer' : 'default' }}
+          >
+            <div
+              className="flex items-center gap-2 mb-2 rounded-xl transition-colors"
+              style={{ padding: '4px 6px', background: draggingTask ? 'rgba(107,78,255,0.06)' : 'transparent' }}
+            >
               <div
                 className="flex items-center justify-center flex-shrink-0"
                 style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '9999px',
+                  width: '32px', height: '32px', borderRadius: '9999px',
                   background: isToday ? '#6B4EFF' : '#F2F2F7',
                   color: isToday ? '#FFFFFF' : '#6C6C70',
-                  fontSize: '14px',
-                  fontWeight: 600,
+                  fontSize: '14px', fontWeight: 600,
                 }}
               >
                 {day.getDate()}
@@ -165,7 +197,10 @@ function WeekView({ tasks, days, today, onOpenDetail, onToggle }: {
               <span style={{ fontSize: '14px', fontWeight: 500, color: isToday ? '#6B4EFF' : isPast ? '#AEAEB2' : '#1C1C1E' }}>
                 {DAY_NAMES_FULL[day.getDay()]}
               </span>
-              {dayTasks.length > 0 && (
+              {draggingTask && (
+                <span style={{ marginLeft: 'auto', fontSize: '11px', color: '#6B4EFF' }}>Перемістити сюди</span>
+              )}
+              {!draggingTask && dayTasks.length > 0 && (
                 <span style={{ fontSize: '12px', color: '#AEAEB2', marginLeft: 'auto' }}>
                   {dayTasks.filter(t => t.done).length}/{dayTasks.length}
                 </span>
@@ -176,45 +211,14 @@ function WeekView({ tasks, days, today, onOpenDetail, onToggle }: {
             ) : (
               <ul className="ml-10 space-y-1.5">
                 {dayTasks.map(task => (
-                  <li
+                  <DraggableTaskRow
                     key={task.id}
-                    className="flex items-center gap-2"
-                    style={{
-                      background: '#FFFFFF',
-                      borderRadius: '12px',
-                      padding: '8px 12px',
-                      boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)',
-                      opacity: task.done ? 0.5 : 1,
-                    }}
-                  >
-                    <button
-                      onClick={() => onToggle(task.id)}
-                      className="flex-shrink-0 flex items-center justify-center transition-colors"
-                      style={{
-                        width: '20px',
-                        height: '20px',
-                        borderRadius: '9999px',
-                        border: task.done ? 'none' : '2px solid rgba(60,60,67,0.12)',
-                        background: task.done ? '#6B4EFF' : 'transparent',
-                        color: '#FFFFFF',
-                      }}
-                    >
-                      {task.done && <span style={{ fontSize: '10px', lineHeight: 1 }}>✓</span>}
-                    </button>
-                    <span
-                      className="flex-1"
-                      style={{
-                        fontSize: '14px',
-                        color: task.done ? '#AEAEB2' : '#1C1C1E',
-                        textDecoration: task.done ? 'line-through' : 'none',
-                      }}
-                      onClick={() => onOpenDetail(task)}
-                    >
-                      {task.title}
-                    </span>
-                    {task.priority === 'must' && !task.done && <span className="text-xs">🔥</span>}
-                    {task.duration && !task.done && <span style={{ fontSize: '12px', color: '#AEAEB2' }}>{task.duration}</span>}
-                  </li>
+                    task={task}
+                    isDragging={draggingTask?.id === task.id}
+                    onToggle={onToggle}
+                    onOpenDetail={onOpenDetail}
+                    onStartDrag={onStartDrag}
+                  />
                 ))}
               </ul>
             )}
@@ -226,7 +230,66 @@ function WeekView({ tasks, days, today, onOpenDetail, onToggle }: {
   )
 }
 
-function MonthView({ tasks, days, today, onOpenDetail, monthOffset, onPrev, onNext }: {
+function DraggableTaskRow({ task, isDragging, onToggle, onOpenDetail, onStartDrag }: {
+  task: Task
+  isDragging: boolean
+  onToggle: (id: string) => void
+  onOpenDetail: (t: Task) => void
+  onStartDrag: (t: Task) => void
+}) {
+  const longPressRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  function handleTouchStart() {
+    longPressRef.current = setTimeout(() => onStartDrag(task), 500)
+  }
+  function handleTouchEnd() {
+    if (longPressRef.current) clearTimeout(longPressRef.current)
+  }
+
+  return (
+    <li
+      className="flex items-center gap-2 transition-all"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onTouchMove={handleTouchEnd}
+      style={{
+        background: isDragging ? '#EDE9FF' : '#FFFFFF',
+        borderRadius: '12px',
+        padding: '8px 12px',
+        boxShadow: isDragging
+          ? '0 4px 12px rgba(107,78,255,0.2)'
+          : '0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)',
+        opacity: task.done ? 0.5 : 1,
+        border: isDragging ? '1.5px solid #6B4EFF' : '1.5px solid transparent',
+      }}
+    >
+      <button
+        onClick={() => onToggle(task.id)}
+        className="flex-shrink-0 flex items-center justify-center transition-colors"
+        style={{
+          width: '20px', height: '20px', borderRadius: '9999px',
+          border: task.done ? 'none' : '2px solid rgba(60,60,67,0.12)',
+          background: task.done ? '#6B4EFF' : 'transparent',
+          color: '#FFFFFF',
+        }}
+      >
+        {task.done && <span style={{ fontSize: '10px', lineHeight: '1' }}>✓</span>}
+      </button>
+      <span
+        className="flex-1"
+        style={{ fontSize: '14px', color: task.done ? '#AEAEB2' : isDragging ? '#6B4EFF' : '#1C1C1E', textDecoration: task.done ? 'line-through' : 'none' }}
+        onClick={() => onOpenDetail(task)}
+      >
+        {task.title}
+      </span>
+      {task.priority === 'must' && !task.done && <span className="text-xs">🔥</span>}
+      {task.duration && !task.done && <span style={{ fontSize: '12px', color: '#AEAEB2' }}>{task.duration}</span>}
+      <span style={{ fontSize: '16px', color: '#AEAEB2', cursor: 'grab' }}>⠿</span>
+    </li>
+  )
+}
+
+function MonthView({ tasks, days, today, onOpenDetail, monthOffset, onPrev, onNext, draggingTask, onDropToDate }: {
   tasks: Task[]
   days: (Date | null)[]
   today: string
@@ -234,6 +297,8 @@ function MonthView({ tasks, days, today, onOpenDetail, monthOffset, onPrev, onNe
   monthOffset: number
   onPrev: () => void
   onNext: () => void
+  draggingTask: Task | null
+  onDropToDate: (dateStr: string) => void
 }) {
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
   const selectedTasks = selectedDate ? tasksByDate(tasks, selectedDate) : []
@@ -280,11 +345,14 @@ function MonthView({ tasks, days, today, onOpenDetail, monthOffset, onPrev, onNe
           return (
             <button
               key={dateStr}
-              onClick={() => setSelectedDate(isSelected ? null : dateStr)}
+              onClick={() => draggingTask ? onDropToDate(dateStr) : setSelectedDate(isSelected ? null : dateStr)}
               className="flex flex-col items-center py-1.5 transition-colors"
               style={{
                 borderRadius: '12px',
-                background: isSelected ? '#6B4EFF' : isToday ? '#EDE9FF' : 'transparent',
+                background: draggingTask
+                  ? 'rgba(107,78,255,0.08)'
+                  : isSelected ? '#6B4EFF' : isToday ? '#EDE9FF' : 'transparent',
+                border: draggingTask ? '1px dashed #6B4EFF' : '1px solid transparent',
               }}
             >
               <span style={{
