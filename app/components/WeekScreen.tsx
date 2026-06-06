@@ -248,10 +248,11 @@ function DraggableTaskRow({ task, isDragging, onToggle, onOpenDetail, onStartDra
 
   return (
     <li
-      className="flex items-center gap-2 transition-all"
+      className="flex items-center gap-2 transition-all no-select"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       onTouchMove={handleTouchEnd}
+      onContextMenu={e => e.preventDefault()}
       style={{
         background: isDragging ? '#EDE9FF' : '#FFFFFF',
         borderRadius: '12px',
