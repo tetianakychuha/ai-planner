@@ -189,7 +189,7 @@ function SwipeableCard({
           <button
             onClick={() => onMoveToToday(task.id)}
             className="flex-1 transition-colors"
-            style={{ padding: '10px 16px', borderRadius: '12px', background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.70)', fontSize: '13px', fontWeight: 500 }}
+            style={{ padding: '10px 16px', borderRadius: '12px', background: 'transparent', border: '1px solid rgba(255,255,255,0.18)', color: 'rgba(255,255,255,0.70)', fontSize: '13px', fontWeight: 500 }}
           >
             На сьогодні
           </button>
