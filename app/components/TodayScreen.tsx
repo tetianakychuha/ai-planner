@@ -99,18 +99,27 @@ function TaskRow({
 }) {
   const [editing, setEditing] = useState(false)
   const [editValue, setEditValue] = useState(task.title)
+  const [popped, setPopped] = useState(false)
+
+  function handleToggle() {
+    onToggle(task.id)
+    if (!task.done) {
+      setPopped(true)
+      setTimeout(() => setPopped(false), 300)
+    }
+  }
 
   return (
     <li className={`bg-white rounded-2xl border shadow-sm transition-opacity ${task.done ? 'opacity-50 border-gray-100' : 'border-gray-100'}`}>
       <div className="flex items-start gap-3 p-4">
         {/* checkbox */}
         <button
-          onClick={() => onToggle(task.id)}
+          onClick={handleToggle}
           className={`mt-0.5 w-6 h-6 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-colors ${
             task.done
               ? 'bg-indigo-500 border-indigo-500 text-white'
               : 'border-gray-300'
-          }`}
+          } ${popped ? 'animate-check-pop' : ''}`}
           aria-label={task.done ? 'Позначити як невиконане' : 'Позначити як виконане'}
         >
           {task.done && <span className="text-xs leading-none">✓</span>}
