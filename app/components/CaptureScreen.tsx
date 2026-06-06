@@ -1,9 +1,14 @@
 'use client'
 import { useState, useRef } from 'react'
+import { Task } from '../types'
 
-export default function CaptureScreen({ onSave }: { onSave: (text: string) => void }) {
+type ParsedTask = Pick<Task, 'title' | 'priority' | 'dueDate' | 'duration'>
+
+export default function CaptureScreen({ onSave }: { onSave: (tasks: ParsedTask[]) => void }) {
   const [text, setText] = useState('')
   const [listening, setListening] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const recognitionRef = useRef<any>(null)
 
@@ -41,11 +46,30 @@ export default function CaptureScreen({ onSave }: { onSave: (text: string) => vo
     setListening(true)
   }
 
-  function handleSave() {
+  async function handleSave() {
     const trimmed = text.trim()
     if (!trimmed) return
-    onSave(trimmed)
-    setText('')
+
+    setLoading(true)
+    setError('')
+
+    try {
+      const res = await fetch('/api/parse', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: trimmed }),
+      })
+
+      if (!res.ok) throw new Error('API error')
+
+      const data = await res.json()
+      onSave(data.tasks)
+      setText('')
+    } catch {
+      setError('Не вдалося розпізнати. Спробуй ще раз.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -60,10 +84,13 @@ export default function CaptureScreen({ onSave }: { onSave: (text: string) => vo
         autoFocus
       />
 
+      {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+
       <div className="flex gap-3">
         {/* mic button */}
         <button
           onClick={toggleVoice}
+          disabled={loading}
           className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow transition-all ${
             listening
               ? 'bg-red-500 text-white animate-pulse'
@@ -77,10 +104,17 @@ export default function CaptureScreen({ onSave }: { onSave: (text: string) => vo
         {/* save button */}
         <button
           onClick={handleSave}
-          disabled={!text.trim()}
-          className="flex-1 h-14 rounded-2xl bg-indigo-600 text-white font-semibold text-base shadow disabled:opacity-40 active:bg-indigo-700 transition-colors"
+          disabled={!text.trim() || loading}
+          className="flex-1 h-14 rounded-2xl bg-indigo-600 text-white font-semibold text-base shadow disabled:opacity-40 active:bg-indigo-700 transition-colors flex items-center justify-center gap-2"
         >
-          Зберегти в Inbox
+          {loading ? (
+            <>
+              <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              Аналізую...
+            </>
+          ) : (
+            'Зберегти в Inbox'
+          )}
         </button>
       </div>
     </div>

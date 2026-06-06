@@ -16,7 +16,7 @@ export default function AppShell() {
       {/* screen */}
       <main className="flex-1 overflow-y-auto">
         {tab === 'capture' && (
-          <CaptureScreen onSave={(text) => { store.addTask(text); setTab('inbox') }} />
+          <CaptureScreen onSave={(tasks) => { store.addTasks(tasks); setTab('inbox') }} />
         )}
         {tab === 'inbox' && (
           <InboxScreen

@@ -30,15 +30,27 @@ export function useTasks() {
     saveTasks(updated)
   }, [])
 
-  const addTask = useCallback((title: string) => {
+  const addTask = useCallback((title: string, extra?: Partial<Task>) => {
     const task: Task = {
       id: crypto.randomUUID(),
       title,
       done: false,
       list: 'inbox',
       createdAt: new Date().toISOString(),
+      ...extra,
     }
     persist([...tasks, task])
+  }, [tasks, persist])
+
+  const addTasks = useCallback((items: Array<{ title: string } & Partial<Task>>) => {
+    const newTasks: Task[] = items.map(item => ({
+      id: crypto.randomUUID(),
+      done: false,
+      list: 'inbox' as const,
+      createdAt: new Date().toISOString(),
+      ...item,
+    }))
+    persist([...tasks, ...newTasks])
   }, [tasks, persist])
 
   const moveToToday = useCallback((id: string) => {
@@ -60,5 +72,5 @@ export function useTasks() {
   const inboxTasks = tasks.filter(t => t.list === 'inbox')
   const todayTasks = tasks.filter(t => t.list === 'today')
 
-  return { tasks, inboxTasks, todayTasks, addTask, moveToToday, moveToInbox, toggleDone, deleteTask }
+  return { tasks, inboxTasks, todayTasks, addTask, addTasks, moveToToday, moveToInbox, toggleDone, deleteTask }
 }
