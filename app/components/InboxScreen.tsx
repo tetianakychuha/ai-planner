@@ -1,4 +1,5 @@
 'use client'
+import { useState, useRef } from 'react'
 import { Task } from '../types'
 
 export default function InboxScreen({
@@ -10,6 +11,14 @@ export default function InboxScreen({
   onMoveToToday: (id: string) => void
   onDelete: (id: string) => void
 }) {
+  const sorted = [...tasks].sort((a, b) => {
+    if (a.priority === 'must' && b.priority !== 'must') return -1
+    if (a.priority !== 'must' && b.priority === 'must') return 1
+    if (a.dueDate && !b.dueDate) return -1
+    if (!a.dueDate && b.dueDate) return 1
+    return 0
+  })
+
   return (
     <div className="flex flex-col h-full">
       <div className="px-4 pt-5 pb-3">
@@ -23,46 +32,100 @@ export default function InboxScreen({
         <EmptyState emoji="📭" text="Немає нових задач. Додай через Capture!" />
       ) : (
         <ul className="flex-1 overflow-y-auto px-4 pb-4 space-y-3">
-          {[...tasks].sort((a, b) => {
-            if (a.priority === 'must' && b.priority !== 'must') return -1
-            if (a.priority !== 'must' && b.priority === 'must') return 1
-            if (a.dueDate && !b.dueDate) return -1
-            if (!a.dueDate && b.dueDate) return 1
-            return 0
-          }).map(task => (
-            <li key={task.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-              <p className="text-base text-gray-800 mb-2 leading-snug">{task.title}</p>
-              <div className="flex gap-2 flex-wrap mb-3">
-                {task.priority === 'must' && (
-                  <span className="text-xs font-medium bg-red-50 text-red-500 px-2 py-0.5 rounded-full">🔥 Важливо</span>
-                )}
-                {task.dueDate && (
-                  <span className="text-xs font-medium bg-indigo-50 text-indigo-500 px-2 py-0.5 rounded-full">📅 {formatDate(task.dueDate)}</span>
-                )}
-                {task.duration && (
-                  <span className="text-xs font-medium bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">⏱ {task.duration}</span>
-                )}
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => onMoveToToday(task.id)}
-                  className="flex-1 py-2 rounded-xl bg-indigo-50 text-indigo-700 text-sm font-medium active:bg-indigo-100 transition-colors"
-                >
-                  ☀️ На сьогодні
-                </button>
-                <button
-                  onClick={() => onDelete(task.id)}
-                  className="w-11 h-10 rounded-xl bg-red-50 text-red-500 text-lg flex items-center justify-center active:bg-red-100 transition-colors"
-                  aria-label="Видалити"
-                >
-                  🗑️
-                </button>
-              </div>
-            </li>
+          {sorted.map(task => (
+            <SwipeableCard
+              key={task.id}
+              task={task}
+              onMoveToToday={onMoveToToday}
+              onDelete={onDelete}
+            />
           ))}
         </ul>
       )}
     </div>
+  )
+}
+
+function SwipeableCard({
+  task,
+  onMoveToToday,
+  onDelete,
+}: {
+  task: Task
+  onMoveToToday: (id: string) => void
+  onDelete: (id: string) => void
+}) {
+  const [offsetX, setOffsetX] = useState(0)
+  const [deleting, setDeleting] = useState(false)
+  const startX = useRef<number | null>(null)
+
+  function onTouchStart(e: React.TouchEvent) {
+    startX.current = e.touches[0].clientX
+  }
+
+  function onTouchMove(e: React.TouchEvent) {
+    if (startX.current === null) return
+    const dx = e.touches[0].clientX - startX.current
+    if (dx < 0) setOffsetX(Math.max(dx, -100))
+  }
+
+  function onTouchEnd() {
+    if (offsetX < -60) {
+      setDeleting(true)
+      setTimeout(() => onDelete(task.id), 250)
+    } else {
+      setOffsetX(0)
+    }
+    startX.current = null
+  }
+
+  return (
+    <li className="relative overflow-hidden rounded-2xl">
+      {/* red background behind card */}
+      <div className="absolute inset-0 bg-red-500 rounded-2xl flex items-center justify-end pr-5">
+        <span className="text-white text-xl">🗑️</span>
+      </div>
+
+      <div
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+        style={{
+          transform: `translateX(${deleting ? -100 : offsetX}px)`,
+          transition: offsetX === 0 || deleting ? 'transform 0.25s ease' : 'none',
+          opacity: deleting ? 0 : 1,
+        }}
+        className="relative bg-white border border-gray-100 shadow-sm p-4 rounded-2xl"
+      >
+        <p className="text-base text-gray-800 mb-2 leading-snug">{task.title}</p>
+        <div className="flex gap-2 flex-wrap mb-3">
+          {task.priority === 'must' && (
+            <span className="text-xs font-medium bg-red-50 text-red-500 px-2 py-0.5 rounded-full">🔥 Важливо</span>
+          )}
+          {task.dueDate && (
+            <span className="text-xs font-medium bg-indigo-50 text-indigo-500 px-2 py-0.5 rounded-full">📅 {formatDate(task.dueDate)}</span>
+          )}
+          {task.duration && (
+            <span className="text-xs font-medium bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">⏱ {task.duration}</span>
+          )}
+        </div>
+        <div className="flex gap-2">
+          <button
+            onClick={() => onMoveToToday(task.id)}
+            className="flex-1 py-2 rounded-xl bg-indigo-50 text-indigo-700 text-sm font-medium active:bg-indigo-100 transition-colors"
+          >
+            ☀️ На сьогодні
+          </button>
+          <button
+            onClick={() => onDelete(task.id)}
+            className="w-11 h-10 rounded-xl bg-red-50 text-red-500 text-lg flex items-center justify-center active:bg-red-100 transition-colors"
+            aria-label="Видалити"
+          >
+            🗑️
+          </button>
+        </div>
+      </div>
+    </li>
   )
 }
 
