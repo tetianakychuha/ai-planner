@@ -30,6 +30,19 @@ export default function TodayScreen({
             ? 'Все виконано! 🎉'
             : `${pending.length} залишилось · ${done.length} виконано`}
         </p>
+        {tasks.length > 0 && (
+          <div className="mt-3">
+            <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-indigo-500 rounded-full transition-all duration-500"
+                style={{ width: `${Math.round((done.length / tasks.length) * 100)}%` }}
+              />
+            </div>
+            <p className="text-xs text-gray-400 mt-1 text-right">
+              {Math.round((done.length / tasks.length) * 100)}%
+            </p>
+          </div>
+        )}
       </div>
 
       {tasks.length === 0 ? (
