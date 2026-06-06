@@ -13,7 +13,13 @@ export default function TodayScreen({
   onDelete: (id: string) => void
 }) {
   const done = tasks.filter(t => t.done)
-  const pending = tasks.filter(t => !t.done)
+  const pending = tasks.filter(t => !t.done).sort((a, b) => {
+    if (a.priority === 'must' && b.priority !== 'must') return -1
+    if (a.priority !== 'must' && b.priority === 'must') return 1
+    if (a.dueDate && !b.dueDate) return -1
+    if (!a.dueDate && b.dueDate) return 1
+    return 0
+  })
 
   return (
     <div className="flex flex-col h-full">
