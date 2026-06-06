@@ -138,7 +138,7 @@ export default function AppShell() {
           label="Today"
           badge={store.todayTasks.filter(t => !t.done).length}
         />
-        <TabButton active={tab === 'week'} onClick={() => setTab('week')} emoji="📅" label="Week" />
+        <TabButton active={tab === 'week'} onClick={() => setTab('week')} emoji="📅" label="Календар" />
       </nav>
     </div>
   )
