@@ -20,6 +20,7 @@ Each task object must have:
 - "priority": "must" or "nice" (must = urgent/important, nice = everything else)
 - "dueDate": "YYYY-MM-DD" or null (extract if mentioned, e.g. "завтра" = tomorrow, "в п'ятницю" = this Friday)
 - "duration": string or null (e.g. "30 хв", "1 год")
+- "labels": array of 1-3 short Ukrainian tags that categorize the task (e.g. ["робота", "здоров'я", "дім", "фінанси", "навчання", "особисте", "покупки", "дзвінки"]). Choose from common categories or invent fitting ones.
 
 Today is ${new Date().toISOString().slice(0, 10)}.
 

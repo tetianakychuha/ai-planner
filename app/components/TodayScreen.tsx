@@ -2,6 +2,8 @@
 import { useState } from 'react'
 import { Task } from '../types'
 import DateBadge from './DateBadge'
+import FilterBar, { Filters, DEFAULT_FILTERS, isDefault } from './FilterBar'
+import { applyFilters, collectLabels } from '../utils/filters'
 
 export default function TodayScreen({
   tasks,
@@ -20,6 +22,8 @@ export default function TodayScreen({
   onUpdateDueDate: (id: string, date: string | undefined) => void
   onOpenDetail: (task: Task) => void
 }) {
+  const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS)
+
   const done = tasks.filter(t => t.done)
   const pending = tasks.filter(t => !t.done).sort((a, b) => {
     if (a.priority === 'must' && b.priority !== 'must') return -1
@@ -28,6 +32,10 @@ export default function TodayScreen({
     if (!a.dueDate && b.dueDate) return 1
     return 0
   })
+
+  const allSorted = [...pending, ...done]
+  const filtered = applyFilters(allSorted, filters)
+  const allLabels = collectLabels(tasks)
 
   return (
     <div className="flex flex-col h-full">
@@ -53,6 +61,10 @@ export default function TodayScreen({
         )}
       </div>
 
+      {tasks.length > 0 && (
+        <FilterBar filters={filters} onChange={setFilters} availableLabels={allLabels} />
+      )}
+
       {tasks.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center gap-3 pb-16">
           <span className="text-5xl">☀️</span>
@@ -60,9 +72,14 @@ export default function TodayScreen({
             Немає задач на сьогодні. Перенеси з Inbox!
           </p>
         </div>
+      ) : filtered.length === 0 ? (
+        <div className="flex-1 flex flex-col items-center justify-center gap-3 pb-16">
+          <span className="text-5xl">🔍</span>
+          <p className="text-gray-400 text-center px-8">Немає задач за обраними фільтрами</p>
+        </div>
       ) : (
         <ul className="flex-1 overflow-y-auto px-4 pb-4 space-y-2">
-          {tasks.map(task => (
+          {filtered.map(task => (
             <TaskRow
               key={task.id}
               task={task}

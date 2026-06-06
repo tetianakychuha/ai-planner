@@ -2,6 +2,8 @@
 import { useState, useRef } from 'react'
 import { Task } from '../types'
 import DateBadge from './DateBadge'
+import FilterBar, { Filters, DEFAULT_FILTERS, isDefault } from './FilterBar'
+import { applyFilters, collectLabels } from '../utils/filters'
 
 export default function InboxScreen({
   tasks,
@@ -18,6 +20,8 @@ export default function InboxScreen({
   onUpdateDueDate: (id: string, date: string | undefined) => void
   onOpenDetail: (task: Task) => void
 }) {
+  const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS)
+
   const sorted = [...tasks].sort((a, b) => {
     if (a.priority === 'must' && b.priority !== 'must') return -1
     if (a.priority !== 'must' && b.priority === 'must') return 1
@@ -26,20 +30,29 @@ export default function InboxScreen({
     return 0
   })
 
+  const filtered = applyFilters(sorted, filters)
+  const allLabels = collectLabels(tasks)
+
   return (
     <div className="flex flex-col h-full">
       <div className="px-4 pt-5 pb-3">
         <h1 className="text-xl font-semibold text-gray-800">Inbox</h1>
         <p className="text-sm text-gray-400 mt-0.5">
-          {tasks.length === 0 ? 'Порожньо — чудово!' : `${tasks.length} задач`}
+          {tasks.length === 0 ? 'Порожньо — чудово!' : isDefault(filters) ? `${tasks.length} задач` : `${filtered.length} з ${tasks.length}`}
         </p>
       </div>
 
+      {tasks.length > 0 && (
+        <FilterBar filters={filters} onChange={setFilters} availableLabels={allLabels} />
+      )}
+
       {tasks.length === 0 ? (
         <EmptyState emoji="📭" text="Немає нових задач. Додай через Capture!" />
+      ) : filtered.length === 0 ? (
+        <EmptyState emoji="🔍" text="Немає задач за обраними фільтрами" />
       ) : (
         <ul className="flex-1 overflow-y-auto px-4 pb-4 space-y-3">
-          {sorted.map(task => (
+          {filtered.map(task => (
             <SwipeableCard
               key={task.id}
               task={task}
@@ -142,6 +155,9 @@ function SwipeableCard({
           {task.duration && (
             <span className="text-xs font-medium bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">⏱ {task.duration}</span>
           )}
+          {(task.labels ?? []).map(l => (
+            <span key={l} className="text-xs font-medium bg-purple-50 text-purple-500 px-2 py-0.5 rounded-full">#{l}</span>
+          ))}
         </div>
         <div className="flex gap-2">
           <button
