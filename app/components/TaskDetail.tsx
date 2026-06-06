@@ -26,24 +26,25 @@ export default function TaskDetail({
     onClose()
   }
 
-  const fieldLabelStyle = {
+  const fieldLabelStyle: React.CSSProperties = {
     fontSize: '11px',
-    fontWeight: 500,
-    color: '#AEAEB2',
-    letterSpacing: '0.5px',
-    textTransform: 'uppercase' as const,
+    fontWeight: 600,
+    color: 'rgba(255,255,255,0.45)',
+    letterSpacing: '0.04em',
+    textTransform: 'uppercase',
   }
 
-  const inputStyle = {
-    background: '#F2F2F7',
+  const inputStyle: React.CSSProperties = {
+    background: '#222631',
     borderRadius: '12px',
     padding: '14px 16px',
     fontSize: '17px',
     fontWeight: 500,
-    color: '#1C1C1E',
-    border: 'none',
+    color: 'rgba(255,255,255,0.95)',
+    border: '1px solid rgba(255,255,255,0.12)',
     width: '100%',
     outline: 'none',
+    fontFamily: 'inherit',
   }
 
   return (
@@ -51,26 +52,26 @@ export default function TaskDetail({
       <div
         className="flex flex-col gap-5 max-h-[85vh] overflow-y-auto"
         style={{
-          background: '#FFFFFF',
+          background: '#3B404C',
           borderRadius: '20px 20px 0 0',
           padding: '24px',
-          boxShadow: '0 -4px 24px rgba(0,0,0,0.10)',
+          boxShadow: '0 -4px 32px rgba(0,0,0,0.40)',
         }}
         onClick={e => e.stopPropagation()}
       >
         {/* drag handle */}
         <div
           className="mx-auto -mt-2"
-          style={{ width: '36px', height: '4px', background: 'rgba(60,60,67,0.12)', borderRadius: '9999px' }}
+          style={{ width: '36px', height: '4px', background: 'rgba(255,255,255,0.12)', borderRadius: '9999px' }}
         />
 
-        <h2 style={{ fontSize: '17px', fontWeight: 600, color: '#1C1C1E' }}>Редагувати задачу</h2>
+        <h2 style={{ fontSize: '17px', fontWeight: 500, color: 'rgba(255,255,255,0.95)' }}>Редагувати задачу</h2>
 
         {/* title */}
         <div className="flex flex-col gap-1.5">
           <label style={fieldLabelStyle}>Назва</label>
           <textarea
-            className="resize-none focus:outline-none focus:ring-2"
+            className="resize-none focus:outline-none"
             style={{ ...inputStyle, borderRadius: '12px' }}
             rows={2}
             value={title}
@@ -90,8 +91,8 @@ export default function TaskDetail({
                 borderRadius: '12px',
                 fontSize: '13px',
                 fontWeight: 500,
-                background: priority === 'must' ? '#FF3B30' : '#F2F2F7',
-                color: priority === 'must' ? '#FFFFFF' : '#6C6C70',
+                background: priority === 'must' ? '#FD3433' : 'rgba(255,255,255,0.06)',
+                color: priority === 'must' ? '#FFFFFF' : 'rgba(255,255,255,0.70)',
               }}
             >
               🔥 Важливо
@@ -104,8 +105,8 @@ export default function TaskDetail({
                 borderRadius: '12px',
                 fontSize: '13px',
                 fontWeight: 500,
-                background: priority === 'nice' ? '#6B4EFF' : '#F2F2F7',
-                color: priority === 'nice' ? '#FFFFFF' : '#6C6C70',
+                background: priority === 'nice' ? '#453C4C' : 'rgba(255,255,255,0.06)',
+                color: priority === 'nice' ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.70)',
               }}
             >
               ✨ Бажано
@@ -125,7 +126,7 @@ export default function TaskDetail({
           {dueDate && (
             <button
               onClick={() => setDueDate('')}
-              style={{ fontSize: '12px', color: '#AEAEB2', textAlign: 'left' }}
+              style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)', textAlign: 'left' }}
             >
               × Прибрати дату
             </button>
@@ -151,10 +152,10 @@ export default function TaskDetail({
           style={{
             height: '52px',
             borderRadius: '16px',
-            background: '#6B4EFF',
+            background: '#FD3433',
             color: '#FFFFFF',
             fontSize: '16px',
-            fontWeight: 600,
+            fontWeight: 500,
           }}
         >
           Зберегти

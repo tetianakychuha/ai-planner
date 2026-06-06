@@ -1,15 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
 import "./globals.css";
-
-const geist = Geist({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "AI Планер",
   description: "Твій AI-планер дня",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
+    statusBarStyle: "black-translucent",
     title: "AI Планер",
   },
 };
@@ -18,7 +15,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-  themeColor: "#4f46e5",
+  themeColor: "#222631",
 };
 
 export default function RootLayout({
@@ -28,7 +25,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="uk">
-      <body className={`${geist.className} bg-gray-50 text-gray-900 antialiased`}>
+      <head>
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+      </head>
+      <body style={{ background: '#222631', color: 'rgba(255,255,255,0.95)' }}>
         {children}
       </body>
     </html>

@@ -29,7 +29,6 @@ export default function StatsScreen({ tasks }: { tasks: Task[] }) {
   const mustTasks = allTasks.filter(t => t.priority === 'must')
   const mustDone = mustTasks.filter(t => t.done).length
 
-  // tasks completed per day (by scheduledDate or dueDate)
   const perDay = last7.map(dateStr => {
     const count = doneTasks.filter(t => {
       const d = t.scheduledDate || t.dueDate
@@ -39,7 +38,6 @@ export default function StatsScreen({ tasks }: { tasks: Task[] }) {
   })
   const maxPerDay = Math.max(...perDay.map(d => d.count), 1)
 
-  // label distribution
   const labelMap: Record<string, number> = {}
   allTasks.forEach(t => (t.labels ?? []).forEach(l => {
     labelMap[l] = (labelMap[l] ?? 0) + 1
@@ -47,7 +45,6 @@ export default function StatsScreen({ tasks }: { tasks: Task[] }) {
   const topLabels = Object.entries(labelMap).sort((a, b) => b[1] - a[1]).slice(0, 5)
   const maxLabel = topLabels[0]?.[1] ?? 1
 
-  // streak
   let streak = 0
   for (let i = 6; i >= 0; i--) {
     const d = new Date()
@@ -60,10 +57,10 @@ export default function StatsScreen({ tasks }: { tasks: Task[] }) {
   }
 
   return (
-    <div className="flex flex-col h-full overflow-y-auto">
+    <div className="flex flex-col h-full overflow-y-auto" style={{ background: '#222631' }}>
       <div className="px-4 pt-5 pb-3">
-        <h1 style={{ fontSize: '28px', fontWeight: 700, letterSpacing: '-0.3px', color: '#1C1C1E' }}>Аналітика</h1>
-        <p style={{ fontSize: '13px', fontWeight: 400, color: '#6C6C70', marginTop: '2px' }}>Твій прогрес</p>
+        <h1 style={{ fontSize: '28px', fontWeight: 500, letterSpacing: '-0.02em', color: 'rgba(255,255,255,0.95)' }}>Аналітика</h1>
+        <p style={{ fontSize: '14px', fontWeight: 400, color: 'rgba(255,255,255,0.70)', marginTop: '2px' }}>Твій прогрес</p>
       </div>
 
       <div className="px-4 pb-6 flex flex-col gap-4">
@@ -78,15 +75,15 @@ export default function StatsScreen({ tasks }: { tasks: Task[] }) {
 
         {/* must stats */}
         {mustTasks.length > 0 && (
-          <div style={{ background: '#FFF1F0', borderRadius: '16px', padding: '16px' }}>
-            <p style={{ fontSize: '13px', fontWeight: 500, color: '#FF3B30', marginBottom: '4px' }}>🔥 Важливі задачі</p>
-            <p style={{ fontSize: '28px', fontWeight: 700, color: '#FF3B30' }}>{mustDone} / {mustTasks.length}</p>
-            <div className="mt-2 overflow-hidden" style={{ height: '4px', background: 'rgba(255,59,48,0.15)', borderRadius: '9999px' }}>
+          <div style={{ background: 'rgba(253,52,51,0.10)', border: '1px solid rgba(253,52,51,0.25)', borderRadius: '16px', padding: '16px' }}>
+            <p style={{ fontSize: '13px', fontWeight: 500, color: '#FD3433', marginBottom: '4px' }}>🔥 Важливі задачі</p>
+            <p style={{ fontSize: '32px', fontWeight: 500, letterSpacing: '-0.02em', color: '#FD3433' }}>{mustDone} / {mustTasks.length}</p>
+            <div className="mt-2 overflow-hidden" style={{ height: '4px', background: 'rgba(253,52,51,0.20)', borderRadius: '9999px' }}>
               <div
                 className="h-full transition-all duration-500"
                 style={{
                   width: `${mustTasks.length > 0 ? Math.round((mustDone / mustTasks.length) * 100) : 0}%`,
-                  background: '#FF3B30',
+                  background: '#FD3433',
                   borderRadius: '9999px',
                 }}
               />
@@ -95,8 +92,8 @@ export default function StatsScreen({ tasks }: { tasks: Task[] }) {
         )}
 
         {/* 7-day bar chart */}
-        <div style={{ background: '#FFFFFF', borderRadius: '16px', boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)', padding: '16px' }}>
-          <p style={{ fontSize: '13px', fontWeight: 500, color: '#1C1C1E', marginBottom: '12px' }}>Виконано за 7 днів</p>
+        <div style={{ background: '#3B404C', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.06)', padding: '16px' }}>
+          <p style={{ fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.95)', marginBottom: '12px' }}>Виконано за 7 днів</p>
           <div className="flex items-end gap-1.5 h-20">
             {perDay.map(({ dateStr, count }) => {
               const d = new Date(dateStr + 'T12:00:00')
@@ -108,13 +105,13 @@ export default function StatsScreen({ tasks }: { tasks: Task[] }) {
                     className="w-full rounded-t-md transition-all"
                     style={{
                       height: `${height}px`,
-                      background: count === 0 ? '#EDE9FF' : '#6B4EFF',
+                      background: count === 0 ? 'rgba(253,52,51,0.18)' : '#FD3433',
                     }}
                   />
-                  <span style={{ fontSize: '10px', color: isToday ? '#6B4EFF' : '#AEAEB2', fontWeight: isToday ? 600 : 400 }}>
+                  <span style={{ fontSize: '10px', color: isToday ? '#FD3433' : 'rgba(255,255,255,0.45)', fontWeight: isToday ? 600 : 400 }}>
                     {DAY_SHORT[d.getDay()]}
                   </span>
-                  {count > 0 && <span style={{ fontSize: '10px', color: '#6C6C70' }}>{count}</span>}
+                  {count > 0 && <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.70)' }}>{count}</span>}
                 </div>
               )
             })}
@@ -123,19 +120,19 @@ export default function StatsScreen({ tasks }: { tasks: Task[] }) {
 
         {/* label distribution */}
         {topLabels.length > 0 && (
-          <div style={{ background: '#FFFFFF', borderRadius: '16px', boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)', padding: '16px' }}>
-            <p style={{ fontSize: '13px', fontWeight: 500, color: '#1C1C1E', marginBottom: '12px' }}>Задачі за категоріями</p>
+          <div style={{ background: '#3B404C', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.06)', padding: '16px' }}>
+            <p style={{ fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.95)', marginBottom: '12px' }}>Задачі за категоріями</p>
             <div className="flex flex-col gap-2">
               {topLabels.map(([label, count]) => (
                 <div key={label} className="flex items-center gap-2">
-                  <span style={{ fontSize: '12px', color: '#6C6C70', width: '80px' }} className="truncate">#{label}</span>
-                  <div className="flex-1 overflow-hidden" style={{ height: '6px', background: '#EDE9FF', borderRadius: '9999px' }}>
+                  <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.70)', width: '80px' }} className="truncate">#{label}</span>
+                  <div className="flex-1 overflow-hidden" style={{ height: '6px', background: 'rgba(253,52,51,0.18)', borderRadius: '9999px' }}>
                     <div
                       className="h-full transition-all duration-500"
-                      style={{ width: `${Math.round((count / maxLabel) * 100)}%`, background: '#6B4EFF', borderRadius: '9999px' }}
+                      style={{ width: `${Math.round((count / maxLabel) * 100)}%`, background: '#FD3433', borderRadius: '9999px' }}
                     />
                   </div>
-                  <span style={{ fontSize: '12px', color: '#AEAEB2', width: '16px', textAlign: 'right' }}>{count}</span>
+                  <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)', width: '16px', textAlign: 'right' }}>{count}</span>
                 </div>
               ))}
             </div>
@@ -146,11 +143,11 @@ export default function StatsScreen({ tasks }: { tasks: Task[] }) {
         {(() => {
           const overdue = allTasks.filter(t => !t.done && t.dueDate && t.dueDate < today).length
           return overdue > 0 ? (
-            <div className="flex items-center gap-3" style={{ background: '#FFF8E7', border: '1px solid #FFD60A', borderRadius: '16px', padding: '16px' }}>
+            <div className="flex items-center gap-3" style={{ background: 'rgba(253,52,51,0.10)', border: '1px solid rgba(253,52,51,0.25)', borderRadius: '16px', padding: '16px' }}>
               <span className="text-2xl">⚠️</span>
               <div>
-                <p style={{ fontSize: '13px', fontWeight: 500, color: '#7C5F00' }}>{overdue} прострочених задач</p>
-                <p style={{ fontSize: '12px', color: '#A07800', marginTop: '2px' }}>Перевір Inbox і Today</p>
+                <p style={{ fontSize: '13px', fontWeight: 500, color: '#FD3433' }}>{overdue} прострочених задач</p>
+                <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.70)', marginTop: '2px' }}>Перевір Inbox і Today</p>
               </div>
             </div>
           ) : null
@@ -167,12 +164,12 @@ function StatCard({ label, value, highlight }: { label: string; value: string | 
       style={{
         borderRadius: '16px',
         padding: '16px',
-        background: highlight ? '#EDE9FF' : '#FFFFFF',
-        boxShadow: highlight ? 'none' : '0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)',
+        background: highlight ? 'rgba(253,52,51,0.10)' : '#3B404C',
+        border: highlight ? '1px solid rgba(253,52,51,0.25)' : '1px solid rgba(255,255,255,0.06)',
       }}
     >
-      <p style={{ fontSize: '12px', color: highlight ? '#6B4EFF' : '#6C6C70', marginBottom: '4px' }}>{label}</p>
-      <p style={{ fontSize: '28px', fontWeight: 700, color: highlight ? '#6B4EFF' : '#1C1C1E' }}>{value}</p>
+      <p style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.04em', color: highlight ? '#FD3433' : 'rgba(255,255,255,0.45)', marginBottom: '4px', textTransform: 'uppercase' }}>{label}</p>
+      <p style={{ fontSize: '32px', fontWeight: 500, letterSpacing: '-0.02em', color: highlight ? '#FD3433' : 'rgba(255,255,255,0.95)' }}>{value}</p>
     </div>
   )
 }

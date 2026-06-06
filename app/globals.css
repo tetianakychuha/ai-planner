@@ -1,47 +1,45 @@
 @import "tailwindcss";
 
 :root {
-  /* Brand */
-  --color-primary: #6B4EFF;
-  --color-primary-light: #EDE9FF;
-  --color-primary-pressed: #5538EE;
-
-  /* Priority */
-  --color-important: #FF3B30;
-  --color-important-bg: #FFF1F0;
-
   /* Backgrounds */
-  --bg-primary: #FFFFFF;
-  --bg-secondary: #F2F2F7;
-  --bg-card: #FFFFFF;
+  --color-screen: #222631;
+  --color-card: #3B404C;
+  --color-input: #222631;
+
+  /* Brand Red */
+  --color-red: #FD3433;
+  --color-red-20: rgba(253,52,51,0.20);
+  --color-red-10: rgba(253,52,51,0.10);
+
+  /* Violet (secondary) */
+  --color-violet-75: #453C4C;
+  --color-violet-65: #5E5565;
 
   /* Text */
-  --text-primary: #1C1C1E;
-  --text-secondary: #6C6C70;
-  --text-tertiary: #AEAEB2;
+  --text-primary: rgba(255,255,255,0.95);
+  --text-secondary: rgba(255,255,255,0.70);
+  --text-tertiary: rgba(255,255,255,0.45);
+  --text-cta: #FFFFFF;
 
-  /* Date chip */
-  --color-date-bg: #EEF0FF;
-  --color-date-text: #3C3C8A;
-
-  /* Tab */
-  --tab-active: #6B4EFF;
-  --tab-inactive: #AEAEB2;
-
-  /* Badge */
-  --badge-bg: #FF3B30;
+  /* Borders */
+  --border-subtle: rgba(255,255,255,0.06);
+  --border-medium: rgba(255,255,255,0.12);
+  --border-strong: rgba(255,255,255,0.20);
+  --border-stroke: #616672;
 
   /* Progress */
-  --progress-fill: #6B4EFF;
-  --progress-track: #E5E5EA;
+  --progress-fill: #FD3433;
+  --progress-track: rgba(253,52,51,0.20);
 
-  /* Separator */
-  --separator: rgba(60,60,67,0.12);
+  /* Tab bar */
+  --tab-active: #FD3433;
+  --tab-inactive: rgba(255,255,255,0.40);
 
-  /* Shadows */
-  --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-sheet: 0 -4px 24px rgba(0,0,0,0.10);
-  --shadow-tabbar: 0 -0.5px 0 rgba(60,60,67,0.12);
+  /* Badge */
+  --badge-bg: #FD3433;
+
+  /* Shadows — only for bottom sheet */
+  --shadow-sheet: 0 -4px 32px rgba(0,0,0,0.40);
 }
 
 * {
@@ -57,7 +55,11 @@
 html, body {
   height: 100%;
   overscroll-behavior: none;
-  font-family: 'SF Pro Rounded', 'SF Pro Display', -apple-system, 'Inter', sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-feature-settings: 'cv11', 'ss01', 'ss03';
+  -webkit-font-smoothing: antialiased;
+  background: #222631;
+  color: rgba(255,255,255,0.95);
 }
 
 .safe-bottom {

@@ -72,25 +72,28 @@ export default function CaptureScreen({ onSave }: { onSave: (tasks: ParsedTask[]
     }
   }
 
+  const hasText = text.trim().length > 0
+
   return (
-    <div className="flex flex-col h-full p-4 gap-4">
+    <div className="flex flex-col h-full p-4 gap-4" style={{ background: '#222631' }}>
       <h1
         className="pt-2"
-        style={{ fontSize: '28px', fontWeight: 700, letterSpacing: '-0.3px', color: '#1C1C1E' }}
+        style={{ fontSize: '28px', fontWeight: 500, letterSpacing: '-0.02em', color: 'rgba(255,255,255,0.95)' }}
       >
         Що потрібно зробити?
       </h1>
 
       <textarea
-        className="flex-1 w-full resize-none focus:outline-none focus:ring-2 placeholder-[#AEAEB2]"
+        className="flex-1 w-full resize-none focus:outline-none"
         style={{
-          background: '#F2F2F7',
+          background: 'rgba(255,255,255,0.04)',
           borderRadius: '16px',
-          border: 'none',
+          border: '1px solid rgba(255,255,255,0.06)',
           padding: '16px',
           fontSize: '17px',
           fontWeight: 500,
-          color: '#1C1C1E',
+          color: 'rgba(255,255,255,0.95)',
+          fontFamily: 'inherit',
         }}
         placeholder="Напиши все підряд... наприклад: написати Анні, доробити презу, о 15 дзвінок"
         value={text}
@@ -98,7 +101,9 @@ export default function CaptureScreen({ onSave }: { onSave: (tasks: ParsedTask[]
         autoFocus
       />
 
-      {error && <p className="text-sm text-center" style={{ color: '#FF3B30' }}>{error}</p>}
+      <style>{`textarea::placeholder { color: rgba(255,255,255,0.45); }`}</style>
+
+      {error && <p className="text-sm text-center" style={{ color: '#FD3433' }}>{error}</p>}
 
       <div className="flex gap-3">
         {/* mic button */}
@@ -110,8 +115,9 @@ export default function CaptureScreen({ onSave }: { onSave: (tasks: ParsedTask[]
             width: '52px',
             height: '52px',
             borderRadius: '9999px',
-            background: listening ? '#FF3B30' : '#F2F2F7',
-            color: listening ? '#FFFFFF' : '#6C6C70',
+            background: listening ? '#FD3433' : 'rgba(255,255,255,0.06)',
+            border: '1px solid rgba(255,255,255,0.06)',
+            color: listening ? '#FFFFFF' : 'rgba(255,255,255,0.70)',
             flexShrink: 0,
           }}
           aria-label={listening ? 'Зупинити запис' : 'Голосовий ввід'}
@@ -122,15 +128,15 @@ export default function CaptureScreen({ onSave }: { onSave: (tasks: ParsedTask[]
         {/* save button */}
         <button
           onClick={handleSave}
-          disabled={!text.trim() || loading}
-          className="flex-1 disabled:opacity-40 transition-colors flex items-center justify-center gap-2"
+          disabled={!hasText || loading}
+          className="flex-1 transition-colors flex items-center justify-center gap-2"
           style={{
             height: '52px',
             borderRadius: '16px',
-            background: '#6B4EFF',
+            background: hasText && !loading ? '#FD3433' : 'rgba(253,52,51,0.35)',
             color: '#FFFFFF',
             fontSize: '16px',
-            fontWeight: 600,
+            fontWeight: 500,
           }}
         >
           {loading ? (

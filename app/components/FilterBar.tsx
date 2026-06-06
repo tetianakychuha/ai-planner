@@ -35,8 +35,8 @@ export default function FilterBar({
           borderRadius: '9999px',
           fontSize: '13px',
           fontWeight: 500,
-          background: active ? '#6B4EFF' : '#F2F2F7',
-          color: active ? '#FFFFFF' : '#6C6C70',
+          background: active ? '#FD3433' : 'rgba(255,255,255,0.06)',
+          color: active ? '#FFFFFF' : 'rgba(255,255,255,0.70)',
         }}
       >
         {label}

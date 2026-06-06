@@ -33,7 +33,6 @@ export default function AppShell() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [staleTasks.length])
 
-  // auto-move inbox tasks with today's dueDate to Today — runs once after tasks load
   const autoMovedRef = useRef(false)
   useEffect(() => {
     if (autoMovedRef.current || store.tasks.length === 0) return
@@ -64,7 +63,7 @@ export default function AppShell() {
   }, [undoTask, store])
 
   return (
-    <div className="flex flex-col h-dvh max-w-md mx-auto" style={{ background: '#F2F2F7' }}>
+    <div className="flex flex-col h-dvh max-w-md mx-auto" style={{ background: '#222631' }}>
       {/* rollover banner */}
       {showRollover && staleTasks.length > 0 && (
         <RolloverBanner
@@ -125,12 +124,15 @@ export default function AppShell() {
 
       {/* undo toast */}
       {undoTask && (
-        <div className="absolute bottom-24 left-4 right-4 max-w-md mx-auto text-white rounded-2xl px-4 py-3 flex items-center justify-between shadow-lg z-50 animate-fade-in" style={{ background: '#1C1C1E' }}>
+        <div
+          className="absolute bottom-24 left-4 right-4 max-w-md mx-auto rounded-2xl px-4 py-3 flex items-center justify-between z-50 animate-fade-in"
+          style={{ background: '#3B404C', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.95)' }}
+        >
           <span className="text-sm truncate mr-3">Видалено: {undoTask.title}</span>
           <button
             onClick={handleUndo}
-            className="font-semibold text-sm flex-shrink-0"
-            style={{ color: '#EDE9FF' }}
+            className="font-medium text-sm flex-shrink-0"
+            style={{ color: '#FD3433' }}
           >
             Скасувати
           </button>
@@ -139,8 +141,8 @@ export default function AppShell() {
 
       {/* bottom nav */}
       <nav
-        className="flex bg-white safe-bottom"
-        style={{ boxShadow: '0 -0.5px 0 rgba(60,60,67,0.12)' }}
+        className="flex safe-bottom"
+        style={{ background: '#222631', borderTop: '1px solid rgba(255,255,255,0.12)' }}
       >
         <TabButton active={tab === 'capture'} onClick={() => setTab('capture')} emoji="✏️" label="Capture" />
         <TabButton
@@ -173,14 +175,13 @@ function TabButton({
     <button
       onClick={onClick}
       className="flex-1 flex flex-col items-center justify-center py-3 gap-0.5 transition-colors"
-      style={{ color: active ? '#6B4EFF' : '#AEAEB2' }}
     >
       <span className="relative text-2xl leading-none">
         {emoji}
         {!!badge && badge > 0 && (
           <span
-            className="absolute -top-1 -right-2 text-white text-[10px] font-bold rounded-full min-w-[16px] h-4 flex items-center justify-center px-1"
-            style={{ background: '#FF3B30' }}
+            className="absolute -top-1 -right-2 text-white text-[10px] font-medium rounded-full min-w-[16px] h-4 flex items-center justify-center px-1"
+            style={{ background: '#FD3433' }}
           >
             {badge}
           </span>
@@ -188,7 +189,7 @@ function TabButton({
       </span>
       <span
         className="font-medium"
-        style={{ fontSize: '10px', color: active ? '#6B4EFF' : '#AEAEB2' }}
+        style={{ fontSize: '10px', color: active ? '#FD3433' : 'rgba(255,255,255,0.40)' }}
       >
         {label}
       </span>
