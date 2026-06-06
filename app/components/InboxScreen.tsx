@@ -189,14 +189,14 @@ function SwipeableCard({
           <button
             onClick={() => onMoveToToday(task.id)}
             className="flex-1 transition-colors"
-            style={{ padding: '10px 16px', borderRadius: '12px', background: 'rgba(253,52,51,0.12)', color: '#FD3433', fontSize: '13px', fontWeight: 500 }}
+            style={{ padding: '10px 16px', borderRadius: '12px', background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.70)', fontSize: '13px', fontWeight: 500 }}
           >
-            ☀️ На сьогодні
+            На сьогодні
           </button>
           <button
             onClick={() => onDelete(task.id)}
             className="flex items-center justify-center text-lg transition-colors"
-            style={{ width: '44px', height: '40px', borderRadius: '12px', background: 'rgba(253,52,51,0.10)', color: '#FD3433' }}
+            style={{ width: '44px', height: '40px', borderRadius: '12px', background: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.40)' }}
             aria-label="Видалити"
           >
             🗑️
