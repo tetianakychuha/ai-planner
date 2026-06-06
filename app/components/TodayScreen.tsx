@@ -4,6 +4,7 @@ import { Task } from '../types'
 import DateBadge from './DateBadge'
 import FilterBar, { Filters, DEFAULT_FILTERS, isDefault } from './FilterBar'
 import { applyFilters, collectLabels } from '../utils/filters'
+import { Flame, Clock, Check, Tray, X } from 'lucide-react'
 
 export default function TodayScreen({
   tasks,
@@ -74,14 +75,12 @@ export default function TodayScreen({
 
       {tasks.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center gap-3 pb-16">
-          <span className="text-5xl">☀️</span>
           <p className="text-center px-8" style={{ color: 'rgba(255,255,255,0.45)' }}>
             Немає задач на сьогодні. Перенеси з Inbox!
           </p>
         </div>
       ) : filtered.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center gap-3 pb-16">
-          <span className="text-5xl">🔍</span>
           <p className="text-center px-8" style={{ color: 'rgba(255,255,255,0.45)' }}>Немає задач за обраними фільтрами</p>
         </div>
       ) : (
@@ -158,7 +157,7 @@ function TaskRow({
           }}
           aria-label={task.done ? 'Позначити як невиконане' : 'Позначити як виконане'}
         >
-          {task.done && <span className="text-xs leading-none">✓</span>}
+          {task.done && <Check size={13} strokeWidth={2.5} color="#FFFFFF" />}
         </button>
 
         {/* title + badges */}
@@ -198,16 +197,16 @@ function TaskRow({
           {!task.done && (task.priority === 'must' || task.dueDate || task.duration) && (
             <div className="flex gap-1.5 flex-wrap mt-1">
               {task.priority === 'must' && (
-                <span style={{ fontSize: '13px', fontWeight: 500, background: 'rgba(253,52,51,0.18)', color: '#FD3433', padding: '5px 10px', borderRadius: '9999px' }}>
-                  🔥 Важливо
+                <span className="flex items-center gap-1" style={{ fontSize: '13px', fontWeight: 500, background: 'rgba(253,52,51,0.18)', color: '#FD3433', padding: '5px 10px', borderRadius: '9999px' }}>
+                  <Flame size={13} strokeWidth={2} />Важливо
                 </span>
               )}
               {task.dueDate && (
                 <DateBadge dueDate={task.dueDate} onUpdate={date => onUpdateDueDate(task.id, date)} />
               )}
               {task.duration && (
-                <span style={{ fontSize: '13px', fontWeight: 500, background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.70)', padding: '5px 10px', borderRadius: '9999px' }}>
-                  ⏱ {task.duration}
+                <span className="flex items-center gap-1" style={{ fontSize: '13px', fontWeight: 500, background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.70)', padding: '5px 10px', borderRadius: '9999px' }}>
+                  <Clock size={13} strokeWidth={2} />{task.duration}
                 </span>
               )}
             </div>
@@ -218,19 +217,19 @@ function TaskRow({
         <div className="flex gap-1 ml-2">
           <button
             onClick={() => onMoveToInbox(task.id)}
-            className="flex items-center justify-center text-base"
-            style={{ width: '36px', height: '36px', borderRadius: '12px', background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.45)' }}
+            className="flex items-center justify-center"
+            style={{ width: '36px', height: '36px', borderRadius: '12px', background: 'rgba(255,255,255,0.06)' }}
             aria-label="Перенести в Inbox"
           >
-            📥
+            <Tray size={16} strokeWidth={1.75} color="rgba(255,255,255,0.45)" />
           </button>
           <button
             onClick={() => onDelete(task.id)}
-            className="flex items-center justify-center text-base"
-            style={{ width: '36px', height: '36px', borderRadius: '12px', background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.45)' }}
+            className="flex items-center justify-center"
+            style={{ width: '36px', height: '36px', borderRadius: '12px', background: 'rgba(255,255,255,0.06)' }}
             aria-label="Видалити"
           >
-            ×
+            <X size={16} strokeWidth={2} color="rgba(255,255,255,0.45)" />
           </button>
         </div>
       </div>

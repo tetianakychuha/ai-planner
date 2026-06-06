@@ -4,6 +4,7 @@ import { Task } from '../types'
 import DateBadge from './DateBadge'
 import FilterBar, { Filters, DEFAULT_FILTERS, isDefault } from './FilterBar'
 import { applyFilters, collectLabels } from '../utils/filters'
+import { Flame, Sparkles, Clock, Trash2 } from 'lucide-react'
 
 export default function InboxScreen({
   tasks,
@@ -162,21 +163,21 @@ function SwipeableCard({
         )}
         <div className="flex gap-2 flex-wrap mb-3">
           {task.priority === 'must' && (
-            <span style={{ fontSize: '13px', fontWeight: 500, background: 'rgba(253,52,51,0.18)', color: '#FD3433', padding: '5px 10px', borderRadius: '9999px' }}>
-              🔥 Важливо
+            <span className="flex items-center gap-1" style={{ fontSize: '13px', fontWeight: 500, background: 'rgba(253,52,51,0.18)', color: '#FD3433', padding: '5px 10px', borderRadius: '9999px' }}>
+              <Flame size={13} strokeWidth={2} />Важливо
             </span>
           )}
           {task.priority === 'nice' && (
-            <span style={{ fontSize: '13px', fontWeight: 500, background: '#453C4C', color: 'rgba(255,255,255,0.70)', padding: '5px 10px', borderRadius: '9999px' }}>
-              ✨ Бажано
+            <span className="flex items-center gap-1" style={{ fontSize: '13px', fontWeight: 500, background: '#453C4C', color: 'rgba(255,255,255,0.70)', padding: '5px 10px', borderRadius: '9999px' }}>
+              <Sparkles size={13} strokeWidth={2} />Бажано
             </span>
           )}
           {task.dueDate && (
             <DateBadge dueDate={task.dueDate} onUpdate={date => onUpdateDueDate(task.id, date)} />
           )}
           {task.duration && (
-            <span style={{ fontSize: '13px', fontWeight: 500, background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.70)', padding: '5px 10px', borderRadius: '9999px' }}>
-              ⏱ {task.duration}
+            <span className="flex items-center gap-1" style={{ fontSize: '13px', fontWeight: 500, background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.70)', padding: '5px 10px', borderRadius: '9999px' }}>
+              <Clock size={13} strokeWidth={2} />{task.duration}
             </span>
           )}
           {(task.labels ?? []).map(l => (
@@ -195,11 +196,11 @@ function SwipeableCard({
           </button>
           <button
             onClick={() => onDelete(task.id)}
-            className="flex items-center justify-center text-lg transition-colors"
-            style={{ width: '44px', height: '40px', borderRadius: '12px', background: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.40)' }}
+            className="flex items-center justify-center transition-colors"
+            style={{ width: '44px', height: '40px', borderRadius: '12px', background: 'rgba(255,255,255,0.04)' }}
             aria-label="Видалити"
           >
-            🗑️
+            <Trash2 size={16} strokeWidth={1.75} color="rgba(255,255,255,0.40)" />
           </button>
         </div>
       </div>

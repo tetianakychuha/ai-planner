@@ -1,6 +1,7 @@
 'use client'
 import { useState, useRef } from 'react'
 import { Task } from '../types'
+import { Mic, MicOff } from 'lucide-react'
 
 type ParsedTask = Pick<Task, 'title' | 'priority' | 'dueDate' | 'duration'>
 
@@ -122,7 +123,9 @@ export default function CaptureScreen({ onSave }: { onSave: (tasks: ParsedTask[]
           }}
           aria-label={listening ? 'Зупинити запис' : 'Голосовий ввід'}
         >
-          🎙️
+          {listening
+            ? <MicOff size={22} strokeWidth={1.75} color="#FFFFFF" />
+            : <Mic size={22} strokeWidth={1.75} color="rgba(255,255,255,0.70)" />}
         </button>
 
         {/* save button */}

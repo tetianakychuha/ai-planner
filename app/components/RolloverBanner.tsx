@@ -1,4 +1,5 @@
 'use client'
+import { ArrowRight, X } from 'lucide-react'
 
 type Props = {
   count: number
@@ -24,17 +25,17 @@ export default function RolloverBanner({ count, onRollover, onDismiss }: Props) 
       <div className="flex gap-2">
         <button
           onClick={onRollover}
-          className="flex-1 py-2 transition-colors"
+          className="flex-1 py-2 transition-colors flex items-center justify-center gap-1.5"
           style={{ borderRadius: '12px', background: '#FD3433', color: '#FFFFFF', fontSize: '14px', fontWeight: 500 }}
         >
-          Перенести на сьогодні
+          <ArrowRight size={15} strokeWidth={2} />Перенести на сьогодні
         </button>
         <button
           onClick={onDismiss}
-          className="px-4 py-2 transition-colors"
-          style={{ borderRadius: '12px', background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.70)', fontSize: '14px', fontWeight: 500 }}
+          className="flex items-center justify-center transition-colors"
+          style={{ width: '40px', borderRadius: '12px', background: 'rgba(255,255,255,0.06)' }}
         >
-          Відхилити
+          <X size={16} strokeWidth={2} color="rgba(255,255,255,0.70)" />
         </button>
       </div>
     </div>

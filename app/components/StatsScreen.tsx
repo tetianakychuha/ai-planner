@@ -1,5 +1,6 @@
 'use client'
 import { Task } from '../types'
+import { Flame, AlertTriangle } from 'lucide-react'
 
 function toDateStr(d: Date) {
   return d.toISOString().slice(0, 10)
@@ -76,7 +77,7 @@ export default function StatsScreen({ tasks }: { tasks: Task[] }) {
         {/* must stats */}
         {mustTasks.length > 0 && (
           <div style={{ background: 'rgba(253,52,51,0.10)', border: '1px solid rgba(253,52,51,0.25)', borderRadius: '16px', padding: '16px' }}>
-            <p style={{ fontSize: '13px', fontWeight: 500, color: '#FD3433', marginBottom: '4px' }}>🔥 Важливі задачі</p>
+            <p className="flex items-center gap-1.5" style={{ fontSize: '13px', fontWeight: 500, color: '#FD3433', marginBottom: '4px' }}><Flame size={13} strokeWidth={2} />Важливі задачі</p>
             <p style={{ fontSize: '32px', fontWeight: 500, letterSpacing: '-0.02em', color: '#FD3433' }}>{mustDone} / {mustTasks.length}</p>
             <div className="mt-2 overflow-hidden" style={{ height: '4px', background: 'rgba(253,52,51,0.20)', borderRadius: '9999px' }}>
               <div
@@ -144,7 +145,7 @@ export default function StatsScreen({ tasks }: { tasks: Task[] }) {
           const overdue = allTasks.filter(t => !t.done && t.dueDate && t.dueDate < today).length
           return overdue > 0 ? (
             <div className="flex items-center gap-3" style={{ background: 'rgba(253,52,51,0.10)', border: '1px solid rgba(253,52,51,0.25)', borderRadius: '16px', padding: '16px' }}>
-              <span className="text-2xl">⚠️</span>
+              <AlertTriangle size={22} strokeWidth={1.75} color="#FD3433" />
               <div>
                 <p style={{ fontSize: '13px', fontWeight: 500, color: '#FD3433' }}>{overdue} прострочених задач</p>
                 <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.70)', marginTop: '2px' }}>Перевір Inbox і Today</p>

@@ -9,6 +9,7 @@ import RolloverBanner from './RolloverBanner'
 import TaskDetail from './TaskDetail'
 import WeekScreen from './WeekScreen'
 import StatsScreen from './StatsScreen'
+import { PenLine, Tray, Sun, CalendarDays, BarChart2 } from 'lucide-react'
 
 type Tab = 'capture' | 'inbox' | 'today' | 'week' | 'stats'
 
@@ -144,40 +145,41 @@ export default function AppShell() {
         className="flex safe-bottom"
         style={{ background: '#222631', borderTop: '1px solid rgba(255,255,255,0.12)' }}
       >
-        <TabButton active={tab === 'capture'} onClick={() => setTab('capture')} emoji="✏️" label="Capture" />
+        <TabButton active={tab === 'capture'} onClick={() => setTab('capture')} icon={PenLine} label="Capture" />
         <TabButton
           active={tab === 'inbox'}
           onClick={() => setTab('inbox')}
-          emoji="📥"
+          icon={Tray}
           label="Inbox"
           badge={store.inboxTasks.length}
         />
         <TabButton
           active={tab === 'today'}
           onClick={() => setTab('today')}
-          emoji="☀️"
+          icon={Sun}
           label="Today"
           badge={store.todayTasks.filter(t => !t.done).length}
         />
-        <TabButton active={tab === 'week'} onClick={() => setTab('week')} emoji="📅" label="Calendar" />
-        <TabButton active={tab === 'stats'} onClick={() => setTab('stats')} emoji="📊" label="Stats" />
+        <TabButton active={tab === 'week'} onClick={() => setTab('week')} icon={CalendarDays} label="Calendar" />
+        <TabButton active={tab === 'stats'} onClick={() => setTab('stats')} icon={BarChart2} label="Stats" />
       </nav>
     </div>
   )
 }
 
 function TabButton({
-  active, onClick, emoji, label, badge,
+  active, onClick, icon: Icon, label, badge,
 }: {
-  active: boolean; onClick: () => void; emoji: string; label: string; badge?: number
+  active: boolean; onClick: () => void; icon: React.ComponentType<{ size?: number; strokeWidth?: number; color?: string }>; label: string; badge?: number
 }) {
+  const color = active ? '#FD3433' : 'rgba(255,255,255,0.40)'
   return (
     <button
       onClick={onClick}
       className="flex-1 flex flex-col items-center justify-center py-3 gap-0.5 transition-colors"
     >
-      <span className="relative text-2xl leading-none">
-        {emoji}
+      <span className="relative leading-none">
+        <Icon size={24} strokeWidth={1.75} color={color} />
         {!!badge && badge > 0 && (
           <span
             className="absolute -top-1 -right-2 text-white text-[10px] font-medium rounded-full min-w-[16px] h-4 flex items-center justify-center px-1"
@@ -189,7 +191,7 @@ function TabButton({
       </span>
       <span
         className="font-medium"
-        style={{ fontSize: '10px', color: active ? '#FD3433' : 'rgba(255,255,255,0.40)' }}
+        style={{ fontSize: '10px', color }}
       >
         {label}
       </span>

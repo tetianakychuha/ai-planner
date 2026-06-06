@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { Task } from '../types'
+import { Flame, Sparkles } from 'lucide-react'
 
 export default function TaskDetail({
   task,
@@ -95,7 +96,9 @@ export default function TaskDetail({
                 color: priority === 'must' ? '#FFFFFF' : 'rgba(255,255,255,0.70)',
               }}
             >
-              🔥 Важливо
+              <span className="flex items-center justify-center gap-1.5">
+                <Flame size={14} strokeWidth={2} />Важливо
+              </span>
             </button>
             <button
               onClick={() => setPriority('nice')}
@@ -109,7 +112,9 @@ export default function TaskDetail({
                 color: priority === 'nice' ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.70)',
               }}
             >
-              ✨ Бажано
+              <span className="flex items-center justify-center gap-1.5">
+                <Sparkles size={14} strokeWidth={2} />Бажано
+              </span>
             </button>
           </div>
         </div>

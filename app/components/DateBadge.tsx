@@ -1,5 +1,6 @@
 'use client'
 import { useRef } from 'react'
+import { CalendarDays } from 'lucide-react'
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr)
@@ -37,7 +38,7 @@ export default function DateBadge({
       }}
       onClick={() => inputRef.current?.showPicker()}
     >
-      📅 {formatDate(dueDate)}
+      <CalendarDays size={13} strokeWidth={2} />{formatDate(dueDate)}
       <input
         ref={inputRef}
         type="date"
