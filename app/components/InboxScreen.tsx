@@ -25,7 +25,18 @@ export default function InboxScreen({
         <ul className="flex-1 overflow-y-auto px-4 pb-4 space-y-3">
           {tasks.map(task => (
             <li key={task.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-              <p className="text-base text-gray-800 mb-3 leading-snug">{task.title}</p>
+              <p className="text-base text-gray-800 mb-2 leading-snug">{task.title}</p>
+              <div className="flex gap-2 flex-wrap mb-3">
+                {task.priority === 'must' && (
+                  <span className="text-xs font-medium bg-red-50 text-red-500 px-2 py-0.5 rounded-full">🔥 Важливо</span>
+                )}
+                {task.dueDate && (
+                  <span className="text-xs font-medium bg-indigo-50 text-indigo-500 px-2 py-0.5 rounded-full">📅 {formatDate(task.dueDate)}</span>
+                )}
+                {task.duration && (
+                  <span className="text-xs font-medium bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">⏱ {task.duration}</span>
+                )}
+              </div>
               <div className="flex gap-2">
                 <button
                   onClick={() => onMoveToToday(task.id)}
@@ -47,6 +58,17 @@ export default function InboxScreen({
       )}
     </div>
   )
+}
+
+function formatDate(dateStr: string): string {
+  const date = new Date(dateStr)
+  const today = new Date()
+  const tomorrow = new Date(today)
+  tomorrow.setDate(today.getDate() + 1)
+
+  if (date.toDateString() === today.toDateString()) return 'Сьогодні'
+  if (date.toDateString() === tomorrow.toDateString()) return 'Завтра'
+  return date.toLocaleDateString('uk-UA', { day: 'numeric', month: 'short' })
 }
 
 function EmptyState({ emoji, text }: { emoji: string; text: string }) {

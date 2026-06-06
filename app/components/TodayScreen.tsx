@@ -50,6 +50,17 @@ export default function TodayScreen({
   )
 }
 
+function formatDate(dateStr: string): string {
+  const date = new Date(dateStr)
+  const today = new Date()
+  const tomorrow = new Date(today)
+  tomorrow.setDate(today.getDate() + 1)
+
+  if (date.toDateString() === today.toDateString()) return 'Сьогодні'
+  if (date.toDateString() === tomorrow.toDateString()) return 'Завтра'
+  return date.toLocaleDateString('uk-UA', { day: 'numeric', month: 'short' })
+}
+
 function TaskRow({
   task,
   onToggle,
@@ -77,10 +88,25 @@ function TaskRow({
           {task.done && <span className="text-xs leading-none">✓</span>}
         </button>
 
-        {/* title */}
-        <span className={`flex-1 text-base leading-snug ${task.done ? 'line-through text-gray-400' : 'text-gray-800'}`}>
-          {task.title}
-        </span>
+        {/* title + badges */}
+        <div className="flex-1 min-w-0">
+          <span className={`text-base leading-snug ${task.done ? 'line-through text-gray-400' : 'text-gray-800'}`}>
+            {task.title}
+          </span>
+          {!task.done && (task.priority === 'must' || task.dueDate || task.duration) && (
+            <div className="flex gap-1.5 flex-wrap mt-1">
+              {task.priority === 'must' && (
+                <span className="text-xs font-medium bg-red-50 text-red-500 px-2 py-0.5 rounded-full">🔥 Важливо</span>
+              )}
+              {task.dueDate && (
+                <span className="text-xs font-medium bg-indigo-50 text-indigo-500 px-2 py-0.5 rounded-full">📅 {formatDate(task.dueDate)}</span>
+              )}
+              {task.duration && (
+                <span className="text-xs font-medium bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">⏱ {task.duration}</span>
+              )}
+            </div>
+          )}
+        </div>
 
         {/* actions */}
         <div className="flex gap-1 ml-2">
