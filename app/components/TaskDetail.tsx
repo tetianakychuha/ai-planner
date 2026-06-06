@@ -1,7 +1,23 @@
 'use client'
 import { useState } from 'react'
 import { Task } from '../types'
-import { Flame, Sparkles } from 'lucide-react'
+import { Flame, Sparkles, Minus, Plus } from 'lucide-react'
+
+function parseDurationMinutes(val: string): number {
+  if (!val) return 0
+  const h = val.match(/(\d+)\s*год/)
+  const m = val.match(/(\d+)\s*хв/)
+  return (h ? parseInt(h[1]) * 60 : 0) + (m ? parseInt(m[1]) : 0)
+}
+
+function formatDuration(minutes: number): string {
+  if (minutes <= 0) return ''
+  const h = Math.floor(minutes / 60)
+  const m = minutes % 60
+  if (h && m) return `${h} год ${m} хв`
+  if (h) return `${h} год`
+  return `${m} хв`
+}
 
 export default function TaskDetail({
   task,
@@ -15,14 +31,14 @@ export default function TaskDetail({
   const [title, setTitle] = useState(task.title)
   const [priority, setPriority] = useState(task.priority ?? 'nice')
   const [dueDate, setDueDate] = useState(task.dueDate ?? '')
-  const [duration, setDuration] = useState(task.duration ?? '')
+  const [durationMin, setDurationMin] = useState(() => parseDurationMinutes(task.duration ?? ''))
 
   function handleSave() {
     onUpdate(task.id, {
       title: title.trim() || task.title,
       priority,
       dueDate: dueDate || undefined,
-      duration: duration.trim() || undefined,
+      duration: formatDuration(durationMin) || undefined,
     })
     onClose()
   }
@@ -141,13 +157,28 @@ export default function TaskDetail({
         {/* duration */}
         <div className="flex flex-col gap-1.5">
           <label style={fieldLabelStyle}>Тривалість</label>
-          <input
-            type="text"
-            placeholder="напр. 30 хв, 1 год"
-            value={duration}
-            onChange={e => setDuration(e.target.value)}
-            style={inputStyle}
-          />
+          <div className="flex items-center" style={{ background: '#222631', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.12)', overflow: 'hidden' }}>
+            <button
+              onClick={() => setDurationMin(m => Math.max(0, m - 15))}
+              className="flex items-center justify-center transition-colors"
+              style={{ width: '52px', height: '52px', flexShrink: 0, color: durationMin === 0 ? 'rgba(255,255,255,0.20)' : 'rgba(255,255,255,0.70)' }}
+            >
+              <Minus size={18} strokeWidth={2} />
+            </button>
+            <span
+              className="flex-1 text-center"
+              style={{ fontSize: '17px', fontWeight: 500, color: durationMin > 0 ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.30)' }}
+            >
+              {durationMin > 0 ? formatDuration(durationMin) : 'Не вказано'}
+            </span>
+            <button
+              onClick={() => setDurationMin(m => Math.min(480, m + 15))}
+              className="flex items-center justify-center transition-colors"
+              style={{ width: '52px', height: '52px', flexShrink: 0, color: durationMin >= 480 ? 'rgba(255,255,255,0.20)' : 'rgba(255,255,255,0.70)' }}
+            >
+              <Plus size={18} strokeWidth={2} />
+            </button>
+          </div>
         </div>
 
         {/* save */}
