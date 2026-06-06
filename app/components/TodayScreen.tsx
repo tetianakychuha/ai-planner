@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { Task } from '../types'
+import DateBadge from './DateBadge'
 
 export default function TodayScreen({
   tasks,
@@ -8,12 +9,14 @@ export default function TodayScreen({
   onMoveToInbox,
   onDelete,
   onUpdateTitle,
+  onUpdateDueDate,
 }: {
   tasks: Task[]
   onToggle: (id: string) => void
   onMoveToInbox: (id: string) => void
   onDelete: (id: string) => void
   onUpdateTitle: (id: string, title: string) => void
+  onUpdateDueDate: (id: string, date: string | undefined) => void
 }) {
   const done = tasks.filter(t => t.done)
   const pending = tasks.filter(t => !t.done).sort((a, b) => {
@@ -65,6 +68,7 @@ export default function TodayScreen({
               onMoveToInbox={onMoveToInbox}
               onDelete={onDelete}
               onUpdateTitle={onUpdateTitle}
+              onUpdateDueDate={onUpdateDueDate}
             />
           ))}
         </ul>
@@ -90,12 +94,14 @@ function TaskRow({
   onMoveToInbox,
   onDelete,
   onUpdateTitle,
+  onUpdateDueDate,
 }: {
   task: Task
   onToggle: (id: string) => void
   onMoveToInbox: (id: string) => void
   onDelete: (id: string) => void
   onUpdateTitle: (id: string, title: string) => void
+  onUpdateDueDate: (id: string, date: string | undefined) => void
 }) {
   const [editing, setEditing] = useState(false)
   const [editValue, setEditValue] = useState(task.title)
@@ -150,7 +156,7 @@ function TaskRow({
                 <span className="text-xs font-medium bg-red-50 text-red-500 px-2 py-0.5 rounded-full">🔥 Важливо</span>
               )}
               {task.dueDate && (
-                <span className="text-xs font-medium bg-indigo-50 text-indigo-500 px-2 py-0.5 rounded-full">📅 {formatDate(task.dueDate)}</span>
+                <DateBadge dueDate={task.dueDate} onUpdate={date => onUpdateDueDate(task.id, date)} />
               )}
               {task.duration && (
                 <span className="text-xs font-medium bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">⏱ {task.duration}</span>

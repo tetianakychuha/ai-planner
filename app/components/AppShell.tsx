@@ -72,6 +72,7 @@ export default function AppShell() {
             onMoveToToday={store.moveToToday}
             onDelete={handleDelete}
             onUpdateTitle={store.updateTitle}
+            onUpdateDueDate={store.updateDueDate}
           />
         )}
         {tab === 'today' && (
@@ -81,6 +82,7 @@ export default function AppShell() {
             onMoveToInbox={store.moveToInbox}
             onDelete={handleDelete}
             onUpdateTitle={store.updateTitle}
+            onUpdateDueDate={store.updateDueDate}
           />
         )}
       </main>

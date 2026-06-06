@@ -70,6 +70,10 @@ export function useTasks() {
     persist(tasks.map(t => t.id === id ? { ...t, title } : t))
   }, [tasks, persist])
 
+  const updateDueDate = useCallback((id: string, dueDate: string | undefined) => {
+    persist(tasks.map(t => t.id === id ? { ...t, dueDate } : t))
+  }, [tasks, persist])
+
   const rescheduleToToday = useCallback((ids: string[]) => {
     const today = new Date().toISOString().slice(0, 10)
     persist(tasks.map(t => ids.includes(t.id) ? { ...t, scheduledDate: today } : t))
@@ -82,5 +86,5 @@ export function useTasks() {
   const inboxTasks = tasks.filter(t => t.list === 'inbox')
   const todayTasks = tasks.filter(t => t.list === 'today')
 
-  return { tasks, inboxTasks, todayTasks, addTask, addTasks, moveToToday, moveToInbox, toggleDone, updateTitle, rescheduleToToday, deleteTask }
+  return { tasks, inboxTasks, todayTasks, addTask, addTasks, moveToToday, moveToInbox, toggleDone, updateTitle, updateDueDate, rescheduleToToday, deleteTask }
 }

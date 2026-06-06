@@ -1,17 +1,20 @@
 'use client'
 import { useState, useRef } from 'react'
 import { Task } from '../types'
+import DateBadge from './DateBadge'
 
 export default function InboxScreen({
   tasks,
   onMoveToToday,
   onDelete,
   onUpdateTitle,
+  onUpdateDueDate,
 }: {
   tasks: Task[]
   onMoveToToday: (id: string) => void
   onDelete: (id: string) => void
   onUpdateTitle: (id: string, title: string) => void
+  onUpdateDueDate: (id: string, date: string | undefined) => void
 }) {
   const sorted = [...tasks].sort((a, b) => {
     if (a.priority === 'must' && b.priority !== 'must') return -1
@@ -41,6 +44,7 @@ export default function InboxScreen({
               onMoveToToday={onMoveToToday}
               onDelete={onDelete}
               onUpdateTitle={onUpdateTitle}
+              onUpdateDueDate={onUpdateDueDate}
             />
           ))}
         </ul>
@@ -54,11 +58,13 @@ function SwipeableCard({
   onMoveToToday,
   onDelete,
   onUpdateTitle,
+  onUpdateDueDate,
 }: {
   task: Task
   onMoveToToday: (id: string) => void
   onDelete: (id: string) => void
   onUpdateTitle: (id: string, title: string) => void
+  onUpdateDueDate: (id: string, date: string | undefined) => void
 }) {
   const [offsetX, setOffsetX] = useState(0)
   const [deleting, setDeleting] = useState(false)
@@ -121,7 +127,7 @@ function SwipeableCard({
             <span className="text-xs font-medium bg-red-50 text-red-500 px-2 py-0.5 rounded-full">🔥 Важливо</span>
           )}
           {task.dueDate && (
-            <span className="text-xs font-medium bg-indigo-50 text-indigo-500 px-2 py-0.5 rounded-full">📅 {formatDate(task.dueDate)}</span>
+            <DateBadge dueDate={task.dueDate} onUpdate={date => onUpdateDueDate(task.id, date)} />
           )}
           {task.duration && (
             <span className="text-xs font-medium bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">⏱ {task.duration}</span>
