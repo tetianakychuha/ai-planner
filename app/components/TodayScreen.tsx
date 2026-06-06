@@ -4,7 +4,7 @@ import { Task } from '../types'
 import DateBadge from './DateBadge'
 import FilterBar, { Filters, DEFAULT_FILTERS, isDefault } from './FilterBar'
 import { applyFilters, collectLabels } from '../utils/filters'
-import { Flame, Clock, Check, Tray, X } from 'lucide-react'
+import { Flame, Clock, Check, Inbox, X } from 'lucide-react'
 
 export default function TodayScreen({
   tasks,
@@ -221,7 +221,7 @@ function TaskRow({
             style={{ width: '36px', height: '36px', borderRadius: '12px', background: 'rgba(255,255,255,0.06)' }}
             aria-label="Перенести в Inbox"
           >
-            <Tray size={16} strokeWidth={1.75} color="rgba(255,255,255,0.45)" />
+            <Inbox size={16} strokeWidth={1.75} color="rgba(255,255,255,0.45)" />
           </button>
           <button
             onClick={() => onDelete(task.id)}

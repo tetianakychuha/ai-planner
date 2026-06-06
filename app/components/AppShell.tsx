@@ -9,7 +9,7 @@ import RolloverBanner from './RolloverBanner'
 import TaskDetail from './TaskDetail'
 import WeekScreen from './WeekScreen'
 import StatsScreen from './StatsScreen'
-import { PenLine, Tray, Sun, CalendarDays, BarChart2 } from 'lucide-react'
+import { PenLine, Inbox, Sun, CalendarDays, BarChart2 } from 'lucide-react'
 
 type Tab = 'capture' | 'inbox' | 'today' | 'week' | 'stats'
 
@@ -149,7 +149,7 @@ export default function AppShell() {
         <TabButton
           active={tab === 'inbox'}
           onClick={() => setTab('inbox')}
-          icon={Tray}
+          icon={Inbox}
           label="Inbox"
           badge={store.inboxTasks.length}
         />
