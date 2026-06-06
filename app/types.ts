@@ -11,5 +11,6 @@ export type Task = {
   labels?: string[]
   subtasks?: Task[]
   createdAt: string
+  scheduledDate?: string
   list: TaskList
 }

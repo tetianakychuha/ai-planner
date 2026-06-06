@@ -54,7 +54,8 @@ export function useTasks() {
   }, [tasks, persist])
 
   const moveToToday = useCallback((id: string) => {
-    persist(tasks.map(t => t.id === id ? { ...t, list: 'today' } : t))
+    const today = new Date().toISOString().slice(0, 10)
+    persist(tasks.map(t => t.id === id ? { ...t, list: 'today', scheduledDate: today } : t))
   }, [tasks, persist])
 
   const moveToInbox = useCallback((id: string) => {
@@ -69,6 +70,11 @@ export function useTasks() {
     persist(tasks.map(t => t.id === id ? { ...t, title } : t))
   }, [tasks, persist])
 
+  const rescheduleToToday = useCallback((ids: string[]) => {
+    const today = new Date().toISOString().slice(0, 10)
+    persist(tasks.map(t => ids.includes(t.id) ? { ...t, scheduledDate: today } : t))
+  }, [tasks, persist])
+
   const deleteTask = useCallback((id: string) => {
     persist(tasks.filter(t => t.id !== id))
   }, [tasks, persist])
@@ -76,5 +82,5 @@ export function useTasks() {
   const inboxTasks = tasks.filter(t => t.list === 'inbox')
   const todayTasks = tasks.filter(t => t.list === 'today')
 
-  return { tasks, inboxTasks, todayTasks, addTask, addTasks, moveToToday, moveToInbox, toggleDone, updateTitle, deleteTask }
+  return { tasks, inboxTasks, todayTasks, addTask, addTasks, moveToToday, moveToInbox, toggleDone, updateTitle, rescheduleToToday, deleteTask }
 }

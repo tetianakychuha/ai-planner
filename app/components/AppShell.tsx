@@ -1,10 +1,11 @@
 'use client'
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { useTasks } from '../store'
 import { Task } from '../types'
 import CaptureScreen from './CaptureScreen'
 import InboxScreen from './InboxScreen'
 import TodayScreen from './TodayScreen'
+import RolloverBanner from './RolloverBanner'
 
 type Tab = 'capture' | 'inbox' | 'today'
 
@@ -13,6 +14,20 @@ export default function AppShell() {
   const store = useTasks()
   const [undoTask, setUndoTask] = useState<Task | null>(null)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [showRollover, setShowRollover] = useState(false)
+
+  const yesterday = new Date()
+  yesterday.setDate(yesterday.getDate() - 1)
+  const yesterdayStr = yesterday.toISOString().slice(0, 10)
+
+  const staleTasks = store.todayTasks.filter(
+    t => !t.done && t.scheduledDate && t.scheduledDate <= yesterdayStr
+  )
+
+  useEffect(() => {
+    if (staleTasks.length > 0) setShowRollover(true)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [staleTasks.length])
 
   const handleDelete = useCallback((id: string) => {
     const task = store.tasks.find(t => t.id === id)
@@ -34,6 +49,18 @@ export default function AppShell() {
 
   return (
     <div className="flex flex-col h-dvh max-w-md mx-auto bg-white shadow-sm">
+      {/* rollover banner */}
+      {showRollover && staleTasks.length > 0 && (
+        <RolloverBanner
+          count={staleTasks.length}
+          onRollover={() => {
+            store.rescheduleToToday(staleTasks.map(t => t.id))
+            setShowRollover(false)
+          }}
+          onDismiss={() => setShowRollover(false)}
+        />
+      )}
+
       {/* screen */}
       <main className="flex-1 overflow-y-auto">
         {tab === 'capture' && (
