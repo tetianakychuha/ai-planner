@@ -7,12 +7,18 @@ const geist = Geist({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "AI Планер",
   description: "Твій AI-планер дня",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "AI Планер",
+  },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
+  themeColor: "#4f46e5",
 };
 
 export default function RootLayout({
