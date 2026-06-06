@@ -10,6 +10,7 @@ export default function TodayScreen({
   onDelete,
   onUpdateTitle,
   onUpdateDueDate,
+  onOpenDetail,
 }: {
   tasks: Task[]
   onToggle: (id: string) => void
@@ -17,6 +18,7 @@ export default function TodayScreen({
   onDelete: (id: string) => void
   onUpdateTitle: (id: string, title: string) => void
   onUpdateDueDate: (id: string, date: string | undefined) => void
+  onOpenDetail: (task: Task) => void
 }) {
   const done = tasks.filter(t => t.done)
   const pending = tasks.filter(t => !t.done).sort((a, b) => {
@@ -69,6 +71,7 @@ export default function TodayScreen({
               onDelete={onDelete}
               onUpdateTitle={onUpdateTitle}
               onUpdateDueDate={onUpdateDueDate}
+              onOpenDetail={onOpenDetail}
             />
           ))}
         </ul>
@@ -95,6 +98,7 @@ function TaskRow({
   onDelete,
   onUpdateTitle,
   onUpdateDueDate,
+  onOpenDetail,
 }: {
   task: Task
   onToggle: (id: string) => void
@@ -102,6 +106,7 @@ function TaskRow({
   onDelete: (id: string) => void
   onUpdateTitle: (id: string, title: string) => void
   onUpdateDueDate: (id: string, date: string | undefined) => void
+  onOpenDetail: (task: Task) => void
 }) {
   const [editing, setEditing] = useState(false)
   const [editValue, setEditValue] = useState(task.title)
@@ -145,7 +150,7 @@ function TaskRow({
           ) : (
             <span
               className={`text-base leading-snug ${task.done ? 'line-through text-gray-400' : 'text-gray-800'}`}
-              onDoubleClick={() => !task.done && setEditing(true)}
+              onClick={() => !task.done && onOpenDetail(task)}
             >
               {task.title}
             </span>

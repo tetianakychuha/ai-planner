@@ -9,12 +9,14 @@ export default function InboxScreen({
   onDelete,
   onUpdateTitle,
   onUpdateDueDate,
+  onOpenDetail,
 }: {
   tasks: Task[]
   onMoveToToday: (id: string) => void
   onDelete: (id: string) => void
   onUpdateTitle: (id: string, title: string) => void
   onUpdateDueDate: (id: string, date: string | undefined) => void
+  onOpenDetail: (task: Task) => void
 }) {
   const sorted = [...tasks].sort((a, b) => {
     if (a.priority === 'must' && b.priority !== 'must') return -1
@@ -45,6 +47,7 @@ export default function InboxScreen({
               onDelete={onDelete}
               onUpdateTitle={onUpdateTitle}
               onUpdateDueDate={onUpdateDueDate}
+              onOpenDetail={onOpenDetail}
             />
           ))}
         </ul>
@@ -59,12 +62,14 @@ function SwipeableCard({
   onDelete,
   onUpdateTitle,
   onUpdateDueDate,
+  onOpenDetail,
 }: {
   task: Task
   onMoveToToday: (id: string) => void
   onDelete: (id: string) => void
   onUpdateTitle: (id: string, title: string) => void
   onUpdateDueDate: (id: string, date: string | undefined) => void
+  onOpenDetail: (task: Task) => void
 }) {
   const [offsetX, setOffsetX] = useState(0)
   const [deleting, setDeleting] = useState(false)
@@ -120,7 +125,12 @@ function SwipeableCard({
             onKeyDown={e => { if (e.key === 'Enter') { onUpdateTitle(task.id, editValue.trim() || task.title); setEditing(false) } }}
           />
         ) : (
-          <p className="text-base text-gray-800 mb-2 leading-snug" onDoubleClick={() => setEditing(true)}>{task.title}</p>
+          <p
+            className="text-base text-gray-800 mb-2 leading-snug"
+            onClick={() => onOpenDetail(task)}
+          >
+            {task.title}
+          </p>
         )}
         <div className="flex gap-2 flex-wrap mb-3">
           {task.priority === 'must' && (

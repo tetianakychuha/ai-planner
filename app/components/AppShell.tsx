@@ -6,6 +6,7 @@ import CaptureScreen from './CaptureScreen'
 import InboxScreen from './InboxScreen'
 import TodayScreen from './TodayScreen'
 import RolloverBanner from './RolloverBanner'
+import TaskDetail from './TaskDetail'
 
 type Tab = 'capture' | 'inbox' | 'today'
 
@@ -15,6 +16,7 @@ export default function AppShell() {
   const [undoTask, setUndoTask] = useState<Task | null>(null)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [showRollover, setShowRollover] = useState(false)
+  const [detailTask, setDetailTask] = useState<Task | null>(null)
 
   const yesterday = new Date()
   yesterday.setDate(yesterday.getDate() - 1)
@@ -73,6 +75,7 @@ export default function AppShell() {
             onDelete={handleDelete}
             onUpdateTitle={store.updateTitle}
             onUpdateDueDate={store.updateDueDate}
+            onOpenDetail={setDetailTask}
           />
         )}
         {tab === 'today' && (
@@ -83,9 +86,19 @@ export default function AppShell() {
             onDelete={handleDelete}
             onUpdateTitle={store.updateTitle}
             onUpdateDueDate={store.updateDueDate}
+            onOpenDetail={setDetailTask}
           />
         )}
       </main>
+
+      {/* task detail modal */}
+      {detailTask && (
+        <TaskDetail
+          task={detailTask}
+          onUpdate={store.updateTask}
+          onClose={() => setDetailTask(null)}
+        />
+      )}
 
       {/* undo toast */}
       {undoTask && (
