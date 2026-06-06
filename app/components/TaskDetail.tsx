@@ -46,19 +46,19 @@ export default function TaskDetail({
   const fieldLabelStyle: React.CSSProperties = {
     fontSize: '11px',
     fontWeight: 600,
-    color: 'rgba(255,255,255,0.45)',
+    color: 'var(--text-tertiary)',
     letterSpacing: '0.04em',
     textTransform: 'uppercase',
   }
 
   const inputStyle: React.CSSProperties = {
-    background: '#222631',
+    background: 'var(--bg-input)',
     borderRadius: '12px',
     padding: '14px 16px',
     fontSize: '17px',
     fontWeight: 500,
-    color: 'rgba(255,255,255,0.95)',
-    border: '1px solid rgba(255,255,255,0.12)',
+    color: 'var(--text-primary)',
+    border: '1px solid var(--border-medium)',
     width: '100%',
     outline: 'none',
     fontFamily: 'inherit',
@@ -69,20 +69,20 @@ export default function TaskDetail({
       <div
         className="flex flex-col gap-5 max-h-[85vh] overflow-y-auto"
         style={{
-          background: '#3B404C',
+          background: 'var(--bg-card)',
           borderRadius: '20px 20px 0 0',
           padding: '24px',
-          boxShadow: '0 -4px 32px rgba(0,0,0,0.40)',
+          boxShadow: 'var(--shadow-sheet)',
         }}
         onClick={e => e.stopPropagation()}
       >
         {/* drag handle */}
         <div
           className="mx-auto -mt-2"
-          style={{ width: '36px', height: '4px', background: 'rgba(255,255,255,0.12)', borderRadius: '9999px' }}
+          style={{ width: '36px', height: '4px', background: 'var(--border-medium)', borderRadius: '9999px' }}
         />
 
-        <h2 style={{ fontSize: '17px', fontWeight: 500, color: 'rgba(255,255,255,0.95)' }}>Редагувати задачу</h2>
+        <h2 style={{ fontSize: '17px', fontWeight: 500, color: 'var(--text-primary)' }}>Редагувати задачу</h2>
 
         {/* title */}
         <div className="flex flex-col gap-1.5">
@@ -108,8 +108,8 @@ export default function TaskDetail({
                 borderRadius: '12px',
                 fontSize: '13px',
                 fontWeight: 500,
-                background: priority === 'must' ? '#FD3433' : 'rgba(255,255,255,0.06)',
-                color: priority === 'must' ? '#FFFFFF' : 'rgba(255,255,255,0.70)',
+                background: priority === 'must' ? '#FD3433' : 'var(--border-subtle)',
+                color: priority === 'must' ? '#FFFFFF' : 'var(--text-secondary)',
               }}
             >
               <span className="flex items-center justify-center gap-1.5">
@@ -124,8 +124,8 @@ export default function TaskDetail({
                 borderRadius: '12px',
                 fontSize: '13px',
                 fontWeight: 500,
-                background: priority === 'nice' ? '#453C4C' : 'rgba(255,255,255,0.06)',
-                color: priority === 'nice' ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.70)',
+                background: priority === 'nice' ? 'var(--bg-violet)' : 'var(--border-subtle)',
+                color: priority === 'nice' ? 'var(--text-primary)' : 'var(--text-secondary)',
               }}
             >
               <span className="flex items-center justify-center gap-1.5">
@@ -147,7 +147,7 @@ export default function TaskDetail({
           {dueDate && (
             <button
               onClick={() => setDueDate('')}
-              style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)', textAlign: 'left' }}
+              style={{ fontSize: '12px', color: 'var(--text-tertiary)', textAlign: 'left' }}
             >
               × Прибрати дату
             </button>
@@ -157,24 +157,24 @@ export default function TaskDetail({
         {/* duration */}
         <div className="flex flex-col gap-1.5">
           <label style={fieldLabelStyle}>Тривалість</label>
-          <div className="flex items-center" style={{ background: '#222631', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.12)', overflow: 'hidden' }}>
+          <div className="flex items-center" style={{ background: 'var(--bg-input)', borderRadius: '12px', border: '1px solid var(--border-medium)', overflow: 'hidden' }}>
             <button
               onClick={() => setDurationMin(m => Math.max(0, m - 15))}
               className="flex items-center justify-center transition-colors"
-              style={{ width: '52px', height: '52px', flexShrink: 0, color: durationMin === 0 ? 'rgba(255,255,255,0.20)' : 'rgba(255,255,255,0.70)' }}
+              style={{ width: '52px', height: '52px', flexShrink: 0, color: durationMin === 0 ? 'var(--text-faint)' : 'var(--text-secondary)' }}
             >
               <Minus size={18} strokeWidth={2} />
             </button>
             <span
               className="flex-1 text-center"
-              style={{ fontSize: '17px', fontWeight: 500, color: durationMin > 0 ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.30)' }}
+              style={{ fontSize: '17px', fontWeight: 500, color: durationMin > 0 ? 'var(--text-primary)' : 'var(--text-tertiary)' }}
             >
               {durationMin > 0 ? formatDuration(durationMin) : 'Не вказано'}
             </span>
             <button
               onClick={() => setDurationMin(m => Math.min(480, m + 15))}
               className="flex items-center justify-center transition-colors"
-              style={{ width: '52px', height: '52px', flexShrink: 0, color: durationMin >= 480 ? 'rgba(255,255,255,0.20)' : 'rgba(255,255,255,0.70)' }}
+              style={{ width: '52px', height: '52px', flexShrink: 0, color: durationMin >= 480 ? 'var(--text-faint)' : 'var(--text-secondary)' }}
             >
               <Plus size={18} strokeWidth={2} />
             </button>

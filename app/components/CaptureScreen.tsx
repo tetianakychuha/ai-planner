@@ -76,10 +76,10 @@ export default function CaptureScreen({ onSave }: { onSave: (tasks: ParsedTask[]
   const hasText = text.trim().length > 0
 
   return (
-    <div className="flex flex-col h-full p-4 gap-4" style={{ background: '#222631' }}>
+    <div className="flex flex-col h-full p-4 gap-4" style={{ background: 'var(--bg-screen)' }}>
       <h1
         className="pt-2"
-        style={{ fontSize: '28px', fontWeight: 500, letterSpacing: '-0.02em', color: 'rgba(255,255,255,0.95)' }}
+        style={{ fontSize: '28px', fontWeight: 500, letterSpacing: '-0.02em', color: 'var(--text-primary)' }}
       >
         Що потрібно зробити?
       </h1>
@@ -87,13 +87,13 @@ export default function CaptureScreen({ onSave }: { onSave: (tasks: ParsedTask[]
       <textarea
         className="flex-1 w-full resize-none focus:outline-none"
         style={{
-          background: 'rgba(255,255,255,0.04)',
+          background: 'var(--border-subtle)',
           borderRadius: '16px',
-          border: '1px solid rgba(255,255,255,0.06)',
+          border: '1px solid var(--border-subtle)',
           padding: '16px',
           fontSize: '17px',
           fontWeight: 500,
-          color: 'rgba(255,255,255,0.95)',
+          color: 'var(--text-primary)',
           fontFamily: 'inherit',
         }}
         placeholder="Напиши все підряд... наприклад: написати Анні, доробити презу, о 15 дзвінок"
@@ -102,7 +102,7 @@ export default function CaptureScreen({ onSave }: { onSave: (tasks: ParsedTask[]
         autoFocus
       />
 
-      <style>{`textarea::placeholder { color: rgba(255,255,255,0.45); }`}</style>
+      <style>{`textarea::placeholder { color: var(--text-tertiary); }`}</style>
 
       {error && <p className="text-sm text-center" style={{ color: '#FD3433' }}>{error}</p>}
 
@@ -116,16 +116,16 @@ export default function CaptureScreen({ onSave }: { onSave: (tasks: ParsedTask[]
             width: '52px',
             height: '52px',
             borderRadius: '9999px',
-            background: listening ? '#FD3433' : 'rgba(255,255,255,0.06)',
-            border: '1px solid rgba(255,255,255,0.06)',
-            color: listening ? '#FFFFFF' : 'rgba(255,255,255,0.70)',
+            background: listening ? '#FD3433' : 'var(--border-subtle)',
+            border: '1px solid var(--border-subtle)',
+            color: listening ? '#FFFFFF' : 'var(--text-secondary)',
             flexShrink: 0,
           }}
           aria-label={listening ? 'Зупинити запис' : 'Голосовий ввід'}
         >
           {listening
             ? <MicOff size={22} strokeWidth={1.75} color="#FFFFFF" />
-            : <Mic size={22} strokeWidth={1.75} color="rgba(255,255,255,0.70)" />}
+            : <Mic size={22} strokeWidth={1.75} color="var(--text-secondary)" />}
         </button>
 
         {/* save button */}

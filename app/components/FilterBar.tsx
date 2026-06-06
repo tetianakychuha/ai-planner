@@ -36,8 +36,8 @@ export default function FilterBar({
           borderRadius: '9999px',
           fontSize: '13px',
           fontWeight: 500,
-          background: active ? '#FD3433' : 'rgba(255,255,255,0.06)',
-          color: active ? '#FFFFFF' : 'rgba(255,255,255,0.70)',
+          background: active ? '#FD3433' : 'var(--border-subtle)',
+          color: active ? '#FFFFFF' : 'var(--text-secondary)',
         }}
       >
         {icon}{label}

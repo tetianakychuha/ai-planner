@@ -9,7 +9,7 @@ import RolloverBanner from './RolloverBanner'
 import TaskDetail from './TaskDetail'
 import WeekScreen from './WeekScreen'
 import StatsScreen from './StatsScreen'
-import { PenLine, Inbox, Sun, CalendarDays, BarChart2 } from 'lucide-react'
+import { PenLine, Inbox, Sun, CalendarDays, BarChart2, Moon } from 'lucide-react'
 
 type Tab = 'capture' | 'inbox' | 'today' | 'week' | 'stats'
 
@@ -20,6 +20,15 @@ export default function AppShell() {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [showRollover, setShowRollover] = useState(false)
   const [detailTask, setDetailTask] = useState<Task | null>(null)
+  const [theme, setTheme] = useState<'dark' | 'light'>(() =>
+    typeof window !== 'undefined' ? (localStorage.getItem('theme') as 'dark' | 'light') || 'dark' : 'dark'
+  )
+
+  function toggleTheme() {
+    const next = theme === 'dark' ? 'light' : 'dark'
+    setTheme(next)
+    localStorage.setItem('theme', next)
+  }
 
   const yesterday = new Date()
   yesterday.setDate(yesterday.getDate() - 1)
@@ -64,7 +73,7 @@ export default function AppShell() {
   }, [undoTask, store])
 
   return (
-    <div className="flex flex-col h-dvh max-w-md mx-auto" style={{ background: '#222631' }}>
+    <div className="flex flex-col h-dvh max-w-md mx-auto relative" data-theme={theme} style={{ background: 'var(--bg-screen)' }}>
       {/* rollover banner */}
       {showRollover && staleTasks.length > 0 && (
         <RolloverBanner
@@ -76,6 +85,29 @@ export default function AppShell() {
           onDismiss={() => setShowRollover(false)}
         />
       )}
+
+      {/* theme toggle */}
+      <div className="absolute top-4 right-4 z-40">
+        <button
+          onClick={toggleTheme}
+          aria-label="Toggle theme"
+          style={{
+            width: '48px',
+            height: '48px',
+            borderRadius: '9999px',
+            background: 'var(--bg-card)',
+            border: '1px solid var(--border-medium)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          {theme === 'dark'
+            ? <Moon size={20} strokeWidth={1.75} color="var(--text-secondary)" />
+            : <Sun size={20} strokeWidth={1.75} color="var(--text-secondary)" />
+          }
+        </button>
+      </div>
 
       {/* screen */}
       <main className="flex-1 overflow-y-auto">
@@ -127,7 +159,7 @@ export default function AppShell() {
       {undoTask && (
         <div
           className="absolute bottom-24 left-4 right-4 max-w-md mx-auto rounded-2xl px-4 py-3 flex items-center justify-between z-50 animate-fade-in"
-          style={{ background: '#3B404C', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.95)' }}
+          style={{ background: 'var(--bg-card)', border: '1px solid var(--border-medium)', color: 'var(--text-primary)' }}
         >
           <span className="text-sm truncate mr-3">Видалено: {undoTask.title}</span>
           <button
@@ -143,7 +175,7 @@ export default function AppShell() {
       {/* bottom nav */}
       <nav
         className="flex safe-bottom"
-        style={{ background: '#222631', borderTop: '1px solid rgba(255,255,255,0.12)' }}
+        style={{ background: 'var(--tab-bg)', borderTop: '1px solid var(--tab-border)' }}
       >
         <TabButton active={tab === 'capture'} onClick={() => setTab('capture')} icon={PenLine} label="Capture" />
         <TabButton
@@ -172,7 +204,7 @@ function TabButton({
 }: {
   active: boolean; onClick: () => void; icon: React.ComponentType<{ size?: number; strokeWidth?: number; color?: string }>; label: string; badge?: number
 }) {
-  const color = active ? '#FD3433' : 'rgba(255,255,255,0.40)'
+  const color = active ? '#FD3433' : 'var(--tab-inactive)'
   return (
     <button
       onClick={onClick}

@@ -1,45 +1,96 @@
 @import "tailwindcss";
 
-:root {
-  /* Backgrounds */
-  --color-screen: #222631;
-  --color-card: #3B404C;
-  --color-input: #222631;
-
-  /* Brand Red */
-  --color-red: #FD3433;
-  --color-red-20: rgba(253,52,51,0.20);
-  --color-red-10: rgba(253,52,51,0.10);
-
-  /* Violet (secondary) */
-  --color-violet-75: #453C4C;
-  --color-violet-65: #5E5565;
-
-  /* Text */
+/* Dark theme (default) */
+:root, [data-theme="dark"] {
+  --bg-screen: #222631;
+  --bg-card: #3B404C;
+  --bg-input: #222631;
+  --bg-violet: #453C4C;
+  --color-accent: #FD3433;
+  --color-accent-10: rgba(253,52,51,0.10);
+  --color-accent-12: rgba(253,52,51,0.12);
+  --color-accent-18: rgba(253,52,51,0.18);
+  --color-accent-20: rgba(253,52,51,0.20);
+  --color-accent-25: rgba(253,52,51,0.25);
+  --color-accent-35: rgba(253,52,51,0.35);
   --text-primary: rgba(255,255,255,0.95);
   --text-secondary: rgba(255,255,255,0.70);
   --text-tertiary: rgba(255,255,255,0.45);
+  --text-faint: rgba(255,255,255,0.20);
   --text-cta: #FFFFFF;
-
-  /* Borders */
   --border-subtle: rgba(255,255,255,0.06);
   --border-medium: rgba(255,255,255,0.12);
   --border-strong: rgba(255,255,255,0.20);
   --border-stroke: #616672;
+  --tab-bg: #222631;
+  --tab-border: rgba(255,255,255,0.12);
+  --shadow-sheet: 0 -4px 32px rgba(0,0,0,0.40);
+  --swipe-reveal: #FD3433;
 
-  /* Progress */
+  /* Legacy aliases */
+  --color-screen: #222631;
+  --color-card: #3B404C;
+  --color-input: #222631;
+  --color-red: #FD3433;
+  --color-red-20: rgba(253,52,51,0.20);
+  --color-red-10: rgba(253,52,51,0.10);
+  --color-violet-75: #453C4C;
+  --color-violet-65: #5E5565;
   --progress-fill: #FD3433;
   --progress-track: rgba(253,52,51,0.20);
-
-  /* Tab bar */
   --tab-active: #FD3433;
   --tab-inactive: rgba(255,255,255,0.40);
-
-  /* Badge */
   --badge-bg: #FD3433;
+}
 
-  /* Shadows — only for bottom sheet */
-  --shadow-sheet: 0 -4px 32px rgba(0,0,0,0.40);
+/* Light theme */
+[data-theme="light"] {
+  --bg-screen: #F2F3F7;
+  --bg-card: #FFFFFF;
+  --bg-input: #F2F3F7;
+  --bg-violet: #EDE9F4;
+  --color-accent: #FD3433;
+  --color-accent-10: rgba(253,52,51,0.08);
+  --color-accent-12: rgba(253,52,51,0.10);
+  --color-accent-18: rgba(253,52,51,0.14);
+  --color-accent-20: rgba(253,52,51,0.15);
+  --color-accent-25: rgba(253,52,51,0.20);
+  --color-accent-35: rgba(253,52,51,0.35);
+  --text-primary: rgba(0,0,0,0.88);
+  --text-secondary: rgba(0,0,0,0.55);
+  --text-tertiary: rgba(0,0,0,0.35);
+  --text-faint: rgba(0,0,0,0.20);
+  --text-cta: #FFFFFF;
+  --border-subtle: rgba(0,0,0,0.06);
+  --border-medium: rgba(0,0,0,0.10);
+  --border-strong: rgba(0,0,0,0.18);
+  --border-stroke: rgba(0,0,0,0.28);
+  --tab-bg: #FFFFFF;
+  --tab-border: rgba(0,0,0,0.08);
+  --shadow-sheet: 0 -4px 32px rgba(0,0,0,0.12);
+  --swipe-reveal: #FD3433;
+
+  /* Legacy aliases */
+  --color-screen: #F2F3F7;
+  --color-card: #FFFFFF;
+  --color-input: #F2F3F7;
+  --color-red: #FD3433;
+  --color-red-20: rgba(253,52,51,0.15);
+  --color-red-10: rgba(253,52,51,0.08);
+  --color-violet-75: #EDE9F4;
+  --color-violet-65: #D8D0E8;
+  --progress-fill: #FD3433;
+  --progress-track: rgba(253,52,51,0.15);
+  --tab-active: #FD3433;
+  --tab-inactive: rgba(0,0,0,0.35);
+  --badge-bg: #FD3433;
+  --border-subtle: rgba(0,0,0,0.06);
+  --border-medium: rgba(0,0,0,0.10);
+  --border-strong: rgba(0,0,0,0.18);
+  --border-stroke: rgba(0,0,0,0.28);
+  --text-primary: rgba(0,0,0,0.88);
+  --text-secondary: rgba(0,0,0,0.55);
+  --text-tertiary: rgba(0,0,0,0.35);
 }
 
 * {
@@ -58,8 +109,8 @@ html, body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-feature-settings: 'cv11', 'ss01', 'ss03';
   -webkit-font-smoothing: antialiased;
-  background: #222631;
-  color: rgba(255,255,255,0.95);
+  background: var(--bg-screen);
+  color: var(--text-primary);
 }
 
 .safe-bottom {

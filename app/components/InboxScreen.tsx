@@ -35,10 +35,10 @@ export default function InboxScreen({
   const allLabels = collectLabels(tasks)
 
   return (
-    <div className="flex flex-col h-full" style={{ background: '#222631' }}>
+    <div className="flex flex-col h-full" style={{ background: 'var(--bg-screen)' }}>
       <div className="px-4 pt-5 pb-3">
-        <h1 style={{ fontSize: '28px', fontWeight: 500, letterSpacing: '-0.02em', color: 'rgba(255,255,255,0.95)' }}>Inbox</h1>
-        <p style={{ fontSize: '14px', fontWeight: 400, color: 'rgba(255,255,255,0.70)', marginTop: '2px' }}>
+        <h1 style={{ fontSize: '28px', fontWeight: 500, letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>Inbox</h1>
+        <p style={{ fontSize: '14px', fontWeight: 400, color: 'var(--text-secondary)', marginTop: '2px' }}>
           {tasks.length === 0 ? 'Порожньо — чудово!' : isDefault(filters) ? `${tasks.length} задач` : `${filtered.length} з ${tasks.length}`}
         </p>
       </div>
@@ -129,10 +129,10 @@ function SwipeableCard({
           transform: `translateX(${deleting ? -100 : offsetX}px)`,
           transition: offsetX === 0 || deleting ? 'transform 0.25s ease' : 'none',
           opacity: deleting ? 0 : 1,
-          background: '#3B404C',
+          background: 'var(--bg-card)',
           borderRadius: '16px',
           padding: '14px 16px',
-          border: '1px solid rgba(255,255,255,0.06)',
+          border: '1px solid var(--border-subtle)',
         }}
         className="relative"
       >
@@ -143,8 +143,8 @@ function SwipeableCard({
             style={{
               fontSize: '17px',
               fontWeight: 500,
-              color: 'rgba(255,255,255,0.95)',
-              background: '#222631',
+              color: 'var(--text-primary)',
+              background: 'var(--bg-input)',
               border: '1px solid #FD3433',
             }}
             value={editValue}
@@ -155,7 +155,7 @@ function SwipeableCard({
         ) : (
           <p
             className="mb-2 leading-snug"
-            style={{ fontSize: '17px', fontWeight: 500, letterSpacing: '-0.01em', color: 'rgba(255,255,255,0.95)' }}
+            style={{ fontSize: '17px', fontWeight: 500, letterSpacing: '-0.01em', color: 'var(--text-primary)' }}
             onClick={() => onOpenDetail(task)}
           >
             {task.title}
@@ -163,12 +163,12 @@ function SwipeableCard({
         )}
         <div className="flex gap-2 flex-wrap mb-3">
           {task.priority === 'must' && (
-            <span className="flex items-center gap-1" style={{ fontSize: '13px', fontWeight: 500, background: 'rgba(253,52,51,0.18)', color: '#FD3433', padding: '5px 10px', borderRadius: '9999px' }}>
+            <span className="flex items-center gap-1" style={{ fontSize: '13px', fontWeight: 500, background: 'var(--color-accent-18)', color: '#FD3433', padding: '5px 10px', borderRadius: '9999px' }}>
               <Flame size={13} strokeWidth={2} />Важливо
             </span>
           )}
           {task.priority === 'nice' && (
-            <span className="flex items-center gap-1" style={{ fontSize: '13px', fontWeight: 500, background: '#453C4C', color: 'rgba(255,255,255,0.70)', padding: '5px 10px', borderRadius: '9999px' }}>
+            <span className="flex items-center gap-1" style={{ fontSize: '13px', fontWeight: 500, background: 'var(--bg-violet)', color: 'var(--text-secondary)', padding: '5px 10px', borderRadius: '9999px' }}>
               <Sparkles size={13} strokeWidth={2} />Бажано
             </span>
           )}
@@ -176,12 +176,12 @@ function SwipeableCard({
             <DateBadge dueDate={task.dueDate} onUpdate={date => onUpdateDueDate(task.id, date)} />
           )}
           {task.duration && (
-            <span className="flex items-center gap-1" style={{ fontSize: '13px', fontWeight: 500, background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.70)', padding: '5px 10px', borderRadius: '9999px' }}>
+            <span className="flex items-center gap-1" style={{ fontSize: '13px', fontWeight: 500, background: 'var(--border-subtle)', color: 'var(--text-secondary)', padding: '5px 10px', borderRadius: '9999px' }}>
               <Clock size={13} strokeWidth={2} />{task.duration}
             </span>
           )}
           {(task.labels ?? []).map(l => (
-            <span key={l} style={{ fontSize: '13px', fontWeight: 500, background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.70)', padding: '5px 10px', borderRadius: '9999px' }}>
+            <span key={l} style={{ fontSize: '13px', fontWeight: 500, background: 'var(--border-subtle)', color: 'var(--text-secondary)', padding: '5px 10px', borderRadius: '9999px' }}>
               #{l}
             </span>
           ))}
@@ -190,17 +190,17 @@ function SwipeableCard({
           <button
             onClick={() => onMoveToToday(task.id)}
             className="flex-1 transition-colors"
-            style={{ padding: '10px 16px', borderRadius: '12px', background: 'transparent', border: '1px solid rgba(255,255,255,0.18)', color: 'rgba(255,255,255,0.70)', fontSize: '13px', fontWeight: 500 }}
+            style={{ padding: '10px 16px', borderRadius: '12px', background: 'transparent', border: '1px solid var(--border-medium)', color: 'var(--text-secondary)', fontSize: '13px', fontWeight: 500 }}
           >
             На сьогодні
           </button>
           <button
             onClick={() => onDelete(task.id)}
             className="flex items-center justify-center transition-colors"
-            style={{ width: '44px', height: '40px', borderRadius: '12px', background: 'rgba(255,255,255,0.04)' }}
+            style={{ width: '44px', height: '40px', borderRadius: '12px', background: 'var(--border-subtle)' }}
             aria-label="Видалити"
           >
-            <Trash2 size={16} strokeWidth={1.75} color="rgba(255,255,255,0.40)" />
+            <Trash2 size={16} strokeWidth={1.75} color="var(--text-tertiary)" />
           </button>
         </div>
       </div>
@@ -212,7 +212,7 @@ function EmptyState({ emoji, text }: { emoji: string; text: string }) {
   return (
     <div className="flex-1 flex flex-col items-center justify-center gap-3 pb-16">
       <span className="text-5xl">{emoji}</span>
-      <p className="text-center px-8" style={{ color: 'rgba(255,255,255,0.45)' }}>{text}</p>
+      <p className="text-center px-8" style={{ color: 'var(--text-tertiary)' }}>{text}</p>
     </div>
   )
 }

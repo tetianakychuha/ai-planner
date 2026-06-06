@@ -39,10 +39,10 @@ export default function TodayScreen({
   const allLabels = collectLabels(tasks)
 
   return (
-    <div className="flex flex-col h-full" style={{ background: '#222631' }}>
+    <div className="flex flex-col h-full" style={{ background: 'var(--bg-screen)' }}>
       <div className="px-4 pt-5 pb-3">
-        <h1 style={{ fontSize: '28px', fontWeight: 500, letterSpacing: '-0.02em', color: 'rgba(255,255,255,0.95)' }}>Сьогодні</h1>
-        <p style={{ fontSize: '14px', fontWeight: 400, color: 'rgba(255,255,255,0.70)', marginTop: '2px' }}>
+        <h1 style={{ fontSize: '28px', fontWeight: 500, letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>Сьогодні</h1>
+        <p style={{ fontSize: '14px', fontWeight: 400, color: 'var(--text-secondary)', marginTop: '2px' }}>
           {pending.length === 0 && tasks.length > 0
             ? 'Все виконано! 🎉'
             : `${pending.length} залишилось · ${done.length} виконано`}
@@ -51,7 +51,7 @@ export default function TodayScreen({
           <div className="mt-3">
             <div
               className="overflow-hidden"
-              style={{ height: '4px', background: 'rgba(253,52,51,0.20)', borderRadius: '9999px' }}
+              style={{ height: '4px', background: 'var(--color-accent-20)', borderRadius: '9999px' }}
             >
               <div
                 className="h-full transition-all duration-500"
@@ -62,7 +62,7 @@ export default function TodayScreen({
                 }}
               />
             </div>
-            <p className="mt-1 text-right" style={{ fontSize: '12px', fontWeight: 600, color: 'rgba(255,255,255,0.45)' }}>
+            <p className="mt-1 text-right" style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-tertiary)' }}>
               {Math.round((done.length / tasks.length) * 100)}%
             </p>
           </div>
@@ -75,13 +75,13 @@ export default function TodayScreen({
 
       {tasks.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center gap-3 pb-16">
-          <p className="text-center px-8" style={{ color: 'rgba(255,255,255,0.45)' }}>
+          <p className="text-center px-8" style={{ color: 'var(--text-tertiary)' }}>
             Немає задач на сьогодні. Перенеси з Inbox!
           </p>
         </div>
       ) : filtered.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center gap-3 pb-16">
-          <p className="text-center px-8" style={{ color: 'rgba(255,255,255,0.45)' }}>Немає задач за обраними фільтрами</p>
+          <p className="text-center px-8" style={{ color: 'var(--text-tertiary)' }}>Немає задач за обраними фільтрами</p>
         </div>
       ) : (
         <ul className="flex-1 overflow-y-auto px-4 pb-4 space-y-2">
@@ -136,9 +136,9 @@ function TaskRow({
     <li
       className="transition-opacity"
       style={{
-        background: '#3B404C',
+        background: 'var(--bg-card)',
         borderRadius: '16px',
-        border: '1px solid rgba(255,255,255,0.06)',
+        border: '1px solid var(--border-subtle)',
         opacity: task.done ? 0.6 : 1,
       }}
     >
@@ -151,7 +151,7 @@ function TaskRow({
             width: '22px',
             height: '22px',
             borderRadius: '9999px',
-            border: task.done ? 'none' : '1.5px solid #616672',
+            border: task.done ? 'none' : '1.5px solid var(--border-stroke)',
             background: task.done ? '#FD3433' : 'transparent',
             color: '#FFFFFF',
           }}
@@ -169,8 +169,8 @@ function TaskRow({
               style={{
                 fontSize: '17px',
                 fontWeight: 500,
-                color: 'rgba(255,255,255,0.95)',
-                background: '#222631',
+                color: 'var(--text-primary)',
+                background: 'var(--bg-input)',
                 border: '1px solid #FD3433',
               }}
               value={editValue}
@@ -185,7 +185,7 @@ function TaskRow({
                 fontSize: '17px',
                 fontWeight: 500,
                 letterSpacing: '-0.01em',
-                color: task.done ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.95)',
+                color: task.done ? 'var(--text-tertiary)' : 'var(--text-primary)',
                 textDecoration: task.done ? 'line-through' : 'none',
                 display: 'block',
               }}
@@ -197,7 +197,7 @@ function TaskRow({
           {!task.done && (task.priority === 'must' || task.dueDate || task.duration) && (
             <div className="flex gap-1.5 flex-wrap mt-1">
               {task.priority === 'must' && (
-                <span className="flex items-center gap-1" style={{ fontSize: '13px', fontWeight: 500, background: 'rgba(253,52,51,0.18)', color: '#FD3433', padding: '5px 10px', borderRadius: '9999px' }}>
+                <span className="flex items-center gap-1" style={{ fontSize: '13px', fontWeight: 500, background: 'var(--color-accent-18)', color: '#FD3433', padding: '5px 10px', borderRadius: '9999px' }}>
                   <Flame size={13} strokeWidth={2} />Важливо
                 </span>
               )}
@@ -205,7 +205,7 @@ function TaskRow({
                 <DateBadge dueDate={task.dueDate} onUpdate={date => onUpdateDueDate(task.id, date)} />
               )}
               {task.duration && (
-                <span className="flex items-center gap-1" style={{ fontSize: '13px', fontWeight: 500, background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.70)', padding: '5px 10px', borderRadius: '9999px' }}>
+                <span className="flex items-center gap-1" style={{ fontSize: '13px', fontWeight: 500, background: 'var(--border-subtle)', color: 'var(--text-secondary)', padding: '5px 10px', borderRadius: '9999px' }}>
                   <Clock size={13} strokeWidth={2} />{task.duration}
                 </span>
               )}
@@ -218,28 +218,28 @@ function TaskRow({
           <button
             onClick={() => onMoveToInbox(task.id)}
             className="flex items-center justify-center"
-            style={{ width: '36px', height: '36px', borderRadius: '12px', background: 'rgba(255,255,255,0.06)' }}
+            style={{ width: '36px', height: '36px', borderRadius: '12px', background: 'var(--border-subtle)' }}
             aria-label="Перенести в Inbox"
           >
-            <Inbox size={16} strokeWidth={1.75} color="rgba(255,255,255,0.45)" />
+            <Inbox size={16} strokeWidth={1.75} color="var(--text-tertiary)" />
           </button>
           <button
             onClick={() => onDelete(task.id)}
             className="flex items-center justify-center"
-            style={{ width: '36px', height: '36px', borderRadius: '12px', background: 'rgba(255,255,255,0.06)' }}
+            style={{ width: '36px', height: '36px', borderRadius: '12px', background: 'var(--border-subtle)' }}
             aria-label="Видалити"
           >
-            <X size={16} strokeWidth={2} color="rgba(255,255,255,0.45)" />
+            <X size={16} strokeWidth={2} color="var(--text-tertiary)" />
           </button>
         </div>
       </div>
 
       {/* subtasks */}
       {task.subtasks && task.subtasks.length > 0 && (
-        <ul className="pb-3 px-4 pl-13 space-y-1 pt-2" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <ul className="pb-3 px-4 pl-13 space-y-1 pt-2" style={{ borderTop: '1px solid var(--border-subtle)' }}>
           {task.subtasks.map(sub => (
-            <li key={sub.id} className="flex items-center gap-2" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.70)' }}>
-              <span className="w-4 h-4 rounded-full flex-shrink-0" style={{ border: '1px solid rgba(255,255,255,0.12)' }} />
+            <li key={sub.id} className="flex items-center gap-2" style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
+              <span className="w-4 h-4 rounded-full flex-shrink-0" style={{ border: '1px solid var(--border-medium)' }} />
               {sub.title}
             </li>
           ))}

@@ -61,15 +61,15 @@ export default function WeekScreen({
   const weekDays = getWeekDays()
 
   return (
-    <div className="flex flex-col h-full" style={{ background: '#222631' }}>
+    <div className="flex flex-col h-full" style={{ background: 'var(--bg-screen)' }}>
       {/* header */}
       <div className="px-4 pt-5 pb-3 flex items-center justify-between">
         <div>
-          <h1 style={{ fontSize: '28px', fontWeight: 500, letterSpacing: '-0.02em', color: 'rgba(255,255,255,0.95)' }}>
+          <h1 style={{ fontSize: '28px', fontWeight: 500, letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
             {view === 'week' ? 'Тиждень' : targetMonth.toLocaleDateString('uk-UA', { month: 'long', year: 'numeric' })}
           </h1>
           {view === 'week' && (
-            <p style={{ fontSize: '14px', fontWeight: 400, color: 'rgba(255,255,255,0.70)', marginTop: '2px' }}>
+            <p style={{ fontSize: '14px', fontWeight: 400, color: 'var(--text-secondary)', marginTop: '2px' }}>
               {weekDays[0].toLocaleDateString('uk-UA', { day: 'numeric', month: 'short' })} —{' '}
               {weekDays[6].toLocaleDateString('uk-UA', { day: 'numeric', month: 'short' })}
             </p>
@@ -79,7 +79,7 @@ export default function WeekScreen({
         {/* view toggle — segment control */}
         <div
           className="flex p-1 gap-1"
-          style={{ background: '#3B404C', borderRadius: '12px' }}
+          style={{ background: 'var(--bg-card)', borderRadius: '12px' }}
         >
           <button
             onClick={() => setView('week')}
@@ -88,9 +88,9 @@ export default function WeekScreen({
               borderRadius: '8px',
               fontSize: '12px',
               fontWeight: 500,
-              background: view === 'week' ? '#222631' : 'transparent',
-              color: view === 'week' ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.45)',
-              border: view === 'week' ? '1px solid rgba(255,255,255,0.12)' : '1px solid transparent',
+              background: view === 'week' ? 'var(--bg-screen)' : 'transparent',
+              color: view === 'week' ? 'var(--text-primary)' : 'var(--text-tertiary)',
+              border: view === 'week' ? '1px solid var(--border-medium)' : '1px solid transparent',
             }}
           >
             Тиждень
@@ -102,9 +102,9 @@ export default function WeekScreen({
               borderRadius: '8px',
               fontSize: '12px',
               fontWeight: 500,
-              background: view === 'month' ? '#222631' : 'transparent',
-              color: view === 'month' ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.45)',
-              border: view === 'month' ? '1px solid rgba(255,255,255,0.12)' : '1px solid transparent',
+              background: view === 'month' ? 'var(--bg-screen)' : 'transparent',
+              color: view === 'month' ? 'var(--text-primary)' : 'var(--text-tertiary)',
+              border: view === 'month' ? '1px solid var(--border-medium)' : '1px solid transparent',
             }}
           >
             Місяць
@@ -115,7 +115,7 @@ export default function WeekScreen({
       {draggingTask && (
         <div
           className="mx-4 mb-2 px-3 py-2 rounded-xl text-sm animate-fade-in"
-          style={{ background: 'rgba(253,52,51,0.12)', color: '#FD3433' }}
+          style={{ background: 'var(--color-accent-12)', color: '#FD3433' }}
         >
           Переміщення: <strong>{draggingTask.title}</strong> — тапни на день куди перемістити
           <button onClick={() => setDraggingTask(null)} className="ml-2 opacity-60">✕</button>
@@ -194,9 +194,9 @@ function WeekView({ tasks, days, today, onOpenDetail, onToggle, draggingTask, on
                 className="flex items-center justify-center flex-shrink-0"
                 style={{
                   width: '32px', height: '32px', borderRadius: '9999px',
-                  background: isToday ? '#FD3433' : 'rgba(255,255,255,0.06)',
-                  border: isToday ? 'none' : '1px solid rgba(255,255,255,0.06)',
-                  color: isToday ? '#FFFFFF' : 'rgba(255,255,255,0.70)',
+                  background: isToday ? '#FD3433' : 'var(--border-subtle)',
+                  border: isToday ? 'none' : '1px solid var(--border-subtle)',
+                  color: isToday ? '#FFFFFF' : 'var(--text-secondary)',
                   fontSize: '14px', fontWeight: 500,
                 }}
               >
@@ -205,7 +205,7 @@ function WeekView({ tasks, days, today, onOpenDetail, onToggle, draggingTask, on
               <span style={{
                 fontSize: '14px',
                 fontWeight: 500,
-                color: isToday ? '#FD3433' : isPast ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.95)',
+                color: isToday ? '#FD3433' : isPast ? 'var(--text-tertiary)' : 'var(--text-primary)',
               }}>
                 {DAY_NAMES_FULL[day.getDay()]}
               </span>
@@ -213,13 +213,13 @@ function WeekView({ tasks, days, today, onOpenDetail, onToggle, draggingTask, on
                 <span style={{ marginLeft: 'auto', fontSize: '11px', color: '#FD3433' }}>Перемістити сюди</span>
               )}
               {!draggingTask && dayTasks.length > 0 && (
-                <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)', marginLeft: 'auto' }}>
+                <span style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginLeft: 'auto' }}>
                   {dayTasks.filter(t => t.done).length}/{dayTasks.length}
                 </span>
               )}
             </div>
             {dayTasks.length === 0 ? (
-              <div className="ml-10" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)' }}>Немає задач</div>
+              <div className="ml-10" style={{ fontSize: '13px', color: 'var(--text-tertiary)' }}>Немає задач</div>
             ) : (
               <ul className="ml-10 space-y-1.5">
                 {dayTasks.map(task => (
@@ -266,7 +266,7 @@ function DraggableTaskRow({ task, isDragging, onToggle, onOpenDetail, onStartDra
       onTouchMove={handleTouchEnd}
       onContextMenu={e => e.preventDefault()}
       style={{
-        background: isDragging ? 'rgba(253,52,51,0.10)' : '#3B404C',
+        background: isDragging ? 'var(--color-accent-10)' : 'var(--bg-card)',
         borderRadius: '12px',
         padding: '8px 12px',
         opacity: task.done ? 0.5 : 1,
@@ -289,7 +289,7 @@ function DraggableTaskRow({ task, isDragging, onToggle, onOpenDetail, onStartDra
         className="flex-1"
         style={{
           fontSize: '14px',
-          color: task.done ? 'rgba(255,255,255,0.45)' : isDragging ? '#FD3433' : 'rgba(255,255,255,0.95)',
+          color: task.done ? 'var(--text-tertiary)' : isDragging ? '#FD3433' : 'var(--text-primary)',
           textDecoration: task.done ? 'line-through' : 'none',
         }}
         onClick={() => onOpenDetail(task)}
@@ -297,8 +297,8 @@ function DraggableTaskRow({ task, isDragging, onToggle, onOpenDetail, onStartDra
         {task.title}
       </span>
       {task.priority === 'must' && !task.done && <span className="text-xs">🔥</span>}
-      {task.duration && !task.done && <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)' }}>{task.duration}</span>}
-      <span style={{ fontSize: '16px', color: 'rgba(255,255,255,0.45)', cursor: 'grab' }}>⠿</span>
+      {task.duration && !task.done && <span style={{ fontSize: '12px', color: 'var(--text-tertiary)' }}>{task.duration}</span>}
+      <span style={{ fontSize: '16px', color: 'var(--text-tertiary)', cursor: 'grab' }}>⠿</span>
     </li>
   )
 }
@@ -324,14 +324,14 @@ function MonthView({ tasks, days, today, onOpenDetail, monthOffset, onPrev, onNe
         <button
           onClick={onPrev}
           className="flex items-center justify-center text-lg"
-          style={{ width: '32px', height: '32px', borderRadius: '9999px', background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.70)' }}
+          style={{ width: '32px', height: '32px', borderRadius: '9999px', background: 'var(--border-subtle)', color: 'var(--text-secondary)' }}
         >
           ‹
         </button>
         <button
           onClick={onNext}
           className="flex items-center justify-center text-lg"
-          style={{ width: '32px', height: '32px', borderRadius: '9999px', background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.70)' }}
+          style={{ width: '32px', height: '32px', borderRadius: '9999px', background: 'var(--border-subtle)', color: 'var(--text-secondary)' }}
         >
           ›
         </button>
@@ -340,7 +340,7 @@ function MonthView({ tasks, days, today, onOpenDetail, monthOffset, onPrev, onNe
       {/* day headers */}
       <div className="grid grid-cols-7 px-2 mb-1">
         {DAY_NAMES_SHORT.map(d => (
-          <div key={d} className="text-center py-1" style={{ fontSize: '12px', fontWeight: 500, color: 'rgba(255,255,255,0.45)' }}>{d}</div>
+          <div key={d} className="text-center py-1" style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-tertiary)' }}>{d}</div>
         ))}
       </div>
 
@@ -373,7 +373,7 @@ function MonthView({ tasks, days, today, onOpenDetail, monthOffset, onPrev, onNe
                 fontSize: '14px',
                 fontWeight: 500,
                 lineHeight: 1,
-                color: (isSelected || isToday) ? '#FFFFFF' : isPast ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.95)',
+                color: (isSelected || isToday) ? '#FFFFFF' : isPast ? 'var(--text-tertiary)' : 'var(--text-primary)',
               }}>
                 {day.getDate()}
               </span>
@@ -402,11 +402,11 @@ function MonthView({ tasks, days, today, onOpenDetail, monthOffset, onPrev, onNe
       <div className="flex-1 overflow-y-auto mt-3 px-4 pb-4">
         {selectedDate ? (
           <>
-            <p className="mb-2" style={{ fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.70)' }}>
+            <p className="mb-2" style={{ fontSize: '13px', fontWeight: 500, color: 'var(--text-secondary)' }}>
               {new Date(selectedDate + 'T12:00:00').toLocaleDateString('uk-UA', { weekday: 'long', day: 'numeric', month: 'long' })}
             </p>
             {selectedTasks.length === 0 ? (
-              <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)' }}>Немає задач</p>
+              <p style={{ fontSize: '13px', color: 'var(--text-tertiary)' }}>Немає задач</p>
             ) : (
               <ul className="space-y-2">
                 {selectedTasks.map(task => (
@@ -414,7 +414,7 @@ function MonthView({ tasks, days, today, onOpenDetail, monthOffset, onPrev, onNe
                     key={task.id}
                     className="flex items-center gap-2"
                     style={{
-                      background: '#3B404C',
+                      background: 'var(--bg-card)',
                       borderRadius: '12px',
                       padding: '10px 12px',
                       border: '1px solid rgba(255,255,255,0.06)',
@@ -426,7 +426,7 @@ function MonthView({ tasks, days, today, onOpenDetail, monthOffset, onPrev, onNe
                       className="flex-1"
                       style={{
                         fontSize: '14px',
-                        color: task.done ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.95)',
+                        color: task.done ? 'var(--text-tertiary)' : 'var(--text-primary)',
                         textDecoration: task.done ? 'line-through' : 'none',
                       }}
                     >
@@ -439,7 +439,7 @@ function MonthView({ tasks, days, today, onOpenDetail, monthOffset, onPrev, onNe
             )}
           </>
         ) : (
-          <p className="text-center mt-4" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)' }}>Натисни на день щоб побачити задачі</p>
+          <p className="text-center mt-4" style={{ fontSize: '13px', color: 'var(--text-tertiary)' }}>Натисни на день щоб побачити задачі</p>
         )}
       </div>
     </div>

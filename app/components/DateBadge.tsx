@@ -28,8 +28,8 @@ export default function DateBadge({
       style={{
         fontSize: '13px',
         fontWeight: 500,
-        background: 'rgba(255,255,255,0.08)',
-        color: 'rgba(255,255,255,0.70)',
+        background: 'var(--border-subtle)',
+        color: 'var(--text-secondary)',
         padding: '5px 10px',
         borderRadius: '9999px',
         display: 'inline-flex',
