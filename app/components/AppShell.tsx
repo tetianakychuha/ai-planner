@@ -7,8 +7,9 @@ import InboxScreen from './InboxScreen'
 import TodayScreen from './TodayScreen'
 import RolloverBanner from './RolloverBanner'
 import TaskDetail from './TaskDetail'
+import WeekScreen from './WeekScreen'
 
-type Tab = 'capture' | 'inbox' | 'today'
+type Tab = 'capture' | 'inbox' | 'today' | 'week'
 
 export default function AppShell() {
   const [tab, setTab] = useState<Tab>('capture')
@@ -78,6 +79,13 @@ export default function AppShell() {
             onOpenDetail={setDetailTask}
           />
         )}
+        {tab === 'week' && (
+          <WeekScreen
+            tasks={store.tasks}
+            onOpenDetail={setDetailTask}
+            onToggle={store.toggleDone}
+          />
+        )}
         {tab === 'today' && (
           <TodayScreen
             tasks={store.todayTasks}
@@ -130,6 +138,7 @@ export default function AppShell() {
           label="Today"
           badge={store.todayTasks.filter(t => !t.done).length}
         />
+        <TabButton active={tab === 'week'} onClick={() => setTab('week')} emoji="📅" label="Week" />
       </nav>
     </div>
   )
